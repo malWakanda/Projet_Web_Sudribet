@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'Inscription</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1>Paris Sport ESME</h1>
+            <div class="user-profile">
+                <span class="user-name">Wade Warren</span>
+                <div class="profile-icon" id="profile-btn">+</div>
+
+                <!-- Menu déroulant -->
+                <div class="dropdown-menu" id="user-menu">
+                    <div id="user-info" class="hidden">Bonjour, <span id="menu-username"></span> !</div>
+                    <button id="login-btn">Se connecter</button>
+                    <button id="signup-btn">Créer un compte</button>
+                    <button id="logout-btn" class="hidden">Se déconnecter</button>
+                    <button id="profile-btn-menu">Profil</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Rechercher par événements, équipes">
+        </div>
+    </header>
+
+    <main>
+
+
+        <section class="tournaments">
+            <h2>Tournois</h2>
+            <div class="tournament-card">
+                <div class="tournament-badge">All matches</div>
+                <h3>LIGUE FFSU</h3>
+                <p class="tournament-subtitle">Matchs de la semaine</p>
+            </div>
+        </section>
+
+        <section class="matches">
+            <h2>Top Matchs</h2>
+            <div class="sports-nav">
+                <button class="sport-btn active" data-sport="football" title="Football">⚽</button>
+                <button class="sport-btn" data-sport="basketball" title="Basketball">🏀</button>
+                <button class="sport-btn" data-sport="rugby" title="Rugby">🏈</button>
+                <button class="sport-btn" data-sport="volley" title="Volley">🏐</button>
+                <button class="sport-btn" data-sport="hand" title="Hand">🤾</button>
+            </div>
+            <div class="matches-container">
+                <!-- FOOTBALL MATCHES -->
+                <div class="match-card" data-sport="football">
+                    <div class="match-header">
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="teams-container">
+                        <div class="team team-home">
+                            <img src="logos/foot.png" alt="Foot ESME">
+                            <span class="team-name">Foot ESME 1</span>
+                        </div>
+                        <div class="score-input-container">
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="score-separator">:</span>
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="match-time">16/03</span>
+                        </div>
+                        <div class="team team-away">
+                            <img src="logos/foot-ieseg.png" alt="Foot IESEG">
+                            <span class="team-name">Foot IESEG</span>
+                        </div>
+                    </div>
+                    <div class="betting-options">
+                        <div class="bet-option">
+                            <div class="bet-label">Victoire</div>
+                            <div class="bet-value">1.8</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Nul</div>
+                            <div class="bet-value">2.1</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Défaite</div>
+                            <div class="bet-value">1.3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="match-card" data-sport="football">
+                    <div class="match-header">
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="teams-container">
+                        <div class="team team-home">
+                            <img src="logos/foot.png" alt="Foot ESME">
+                            <span class="team-name">Foot ESME Féminines</span>
+                        </div>
+                        <div class="score-input-container">
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="score-separator">:</span>
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="match-time">17/03</span>
+                        </div>
+                        <div class="team team-away">
+                            <img src="logos/foot-centrale.png" alt="Foot Centrale">
+                            <span class="team-name">Foot Centrale</span>
+                        </div>
+                    </div>
+                    <div class="betting-options">
+                        <div class="bet-option">
+                            <div class="bet-label">Victoire</div>
+                            <div class="bet-value">2.0</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Nul</div>
+                            <div class="bet-value">1.9</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Défaite</div>
+                            <div class="bet-value">1.6</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BASKETBALL MATCHES -->
+                <div class="match-card" data-sport="basketball" style="display:none;">
+                    <div class="match-header">
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="teams-container">
+                        <div class="team team-home">
+                            <img src="logos/basket.png" alt="Basket ESME">
+                            <span class="team-name">Basket ESME</span>
+                        </div>
+                        <div class="score-input-container">
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="score-separator">:</span>
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="match-time">18/03</span>
+                        </div>
+                        <div class="team team-away">
+                            <img src="logos/basket-ieseg.png" alt="Basket IESEG">
+                            <span class="team-name">Basket IESEG</span>
+                        </div>
+                    </div>
+                    <div class="betting-options">
+                        <div class="bet-option">
+                            <div class="bet-label">Victoire</div>
+                            <div class="bet-value">1.9</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Nul</div>
+                            <div class="bet-value">2.2</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Défaite</div>
+                            <div class="bet-value">1.4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RUGBY MATCHES -->
+                <div class="match-card" data-sport="rugby" style="display:none;">
+                    <div class="match-header">
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="teams-container">
+                        <div class="team team-home">
+                            <img src="logos/rugby.png" alt="Rugby ESME">
+                            <span class="team-name">Rugby ESME</span>
+                        </div>
+                        <div class="score-input-container">
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="score-separator">:</span>
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="match-time">19/03</span>
+                        </div>
+                        <div class="team team-away">
+                            <img src="logos/rugby-centrale.png" alt="Rugby Centrale">
+                            <span class="team-name">Rugby Centrale</span>
+                        </div>
+                    </div>
+                    <div class="betting-options">
+                        <div class="bet-option">
+                            <div class="bet-label">Victoire</div>
+                            <div class="bet-value">1.7</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Nul</div>
+                            <div class="bet-value">2.3</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Défaite</div>
+                            <div class="bet-value">1.5</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VOLLEY MATCHES -->
+                <div class="match-card" data-sport="volley" style="display:none;">
+                    <div class="match-header">
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="teams-container">
+                        <div class="team team-home">
+                            <img src="logos/volley.png" alt="Volley ESME">
+                            <span class="team-name">Volley ESME Équipe 1</span>
+                        </div>
+                        <div class="score-input-container">
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="score-separator">:</span>
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="match-time">20/03</span>
+                        </div>
+                        <div class="team team-away">
+                            <img src="logos/volley-ieseg.png" alt="Volley IESEG">
+                            <span class="team-name">Volley IESEG</span>
+                        </div>
+                    </div>
+                    <div class="betting-options">
+                        <div class="bet-option">
+                            <div class="bet-label">Victoire</div>
+                            <div class="bet-value">1.6</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Nul</div>
+                            <div class="bet-value">2.0</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Défaite</div>
+                            <div class="bet-value">1.8</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="match-card" data-sport="volley" style="display:none;">
+                    <div class="match-header">
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="teams-container">
+                        <div class="team team-home">
+                            <img src="logos/volley.png" alt="Volley ESME">
+                            <span class="team-name">Volley ESME Féminines</span>
+                        </div>
+                        <div class="score-input-container">
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="score-separator">:</span>
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="match-time">21/03</span>
+                        </div>
+                        <div class="team team-away">
+                            <img src="logos/volley-centrale.png" alt="Volley Centrale">
+                            <span class="team-name">Volley Centrale</span>
+                        </div>
+                    </div>
+                    <div class="betting-options">
+                        <div class="bet-option">
+                            <div class="bet-label">Victoire</div>
+                            <div class="bet-value">1.9</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Nul</div>
+                            <div class="bet-value">2.1</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Défaite</div>
+                            <div class="bet-value">1.5</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HAND MATCHES -->
+                <div class="match-card" data-sport="hand" style="display:none;">
+                    <div class="match-header">
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="teams-container">
+                        <div class="team team-home">
+                            <img src="logos/hand.png" alt="Hand ESME">
+                            <span class="team-name">Hand ESME</span>
+                        </div>
+                        <div class="score-input-container">
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="score-separator">:</span>
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="match-time">16/03</span>
+                        </div>
+                        <div class="team team-away">
+                            <img src="logos/hand-ieseg.png" alt="hand-ieseg">
+                            <span class="team-name">Hand IESEG</span>
+                        </div>
+                    </div>
+                    <div class="betting-options">
+                        <div class="bet-option">
+                            <div class="bet-label">Victoire</div>
+                            <div class="bet-value">1.8</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Nul</div>
+                            <div class="bet-value">2.1</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Défaite</div>
+                            <div class="bet-value">1.3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="match-card" data-sport="hand" style="display:none;">
+                    <div class="match-header">
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <div class="teams-container">
+                        <div class="team team-home">
+                            <img src="logos/hand.png" alt="Hand ESME">
+                            <span class="team-name">Hand ESME Féminines</span>
+                        </div>
+                        <div class="score-input-container">
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="score-separator">:</span>
+                            <input type="number" class="score-input" placeholder="0" min="0">
+                            <span class="match-time">22/03</span>
+                        </div>
+                        <div class="team team-away">
+                            <img src="logos/hand-ipsa.png" alt="Hand ipsa">
+                            <span class="team-name">Hand IPSA</span>
+                        </div>
+                    </div>
+                    <div class="betting-options">
+                        <div class="bet-option">
+                            <div class="bet-label">Victoire</div>
+                            <div class="bet-value">2.0</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Nul</div>
+                            <div class="bet-value">1.8</div>
+                        </div>
+                        <div class="bet-option">
+                            <div class="bet-label">Défaite</div>
+                            <div class="bet-value">1.6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div class="modal" id="signup-modal">
+        <div class="modal-content">
+            <h2>Créer un compte</h2>
+
+            <input type="text" id="signup-name" placeholder="Nom complet">
+            <input type="email" id="signup-email" placeholder="Email">
+            <input type="password" id="signup-password" placeholder="Mot de passe">
+
+            <button id="create-account-btn">Créer mon compte</button>
+            <button id="close-modal" class="close-btn">Fermer</button>
+        </div>
+    </div>
+
+
+    <footer class="bottom-nav">
+        <button class="nav-item">🥐</button>
+        <button class="nav-item">⚙️</button>
+        <button class="nav-item">📋</button>
+        <button class="nav-item">⋮</button>
+    </footer>
+</body>
+
+</html>
