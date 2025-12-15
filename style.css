@@ -356,10 +356,18 @@ main {
     letter-spacing: 0.5px;
 }
 
-.bet-value {
-    font-size: 18px;
-    font-weight: 700;
-    color: #FF6B35;
+.bet-option.highlighted {
+    background-color: #FF6B35;
+    color: white;
+    border-color: #FF6B35;
+}
+
+.bet-option.highlighted .bet-label {
+    color: white;
+}
+
+.bet-option.highlighted .bet-value {
+    color: white;
 }
 
 /* ========================================
@@ -463,6 +471,61 @@ main {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.modal-content h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: white;
+    color: #1a1a1a;
+    transition: all 0.2s ease;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: #FF6B35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.modal-content input::placeholder {
+    color: #999;
+}
+
+.modal-content button {
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#create-account-btn {
+    background-color: #FF6B35;
+    color: white;
+}
+
+#login-account-btn {
+    background-color: #FF6B35;
+    color: white;
+}
+
+#login-account-btn:hover {
+    background-color: #e55a2b;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
 }
 
 /* ========================================

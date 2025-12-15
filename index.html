@@ -16,15 +16,15 @@
             <h1>Paris Sport ESME</h1>
             <div class="user-profile">
                 <span class="user-name">Wade Warren</span>
-                <div class="profile-icon" id="profile-btn">+</div>
+                <div class="profile-icon" id="profile-icon">+</div>
 
                 <!-- Menu déroulant -->
                 <div class="dropdown-menu" id="user-menu">
-                    <div id="user-info" class="hidden">Bonjour, <span id="menu-username"></span> !</div>
+                    <div id="user-info">Bonjour, <span id="menu-username"></span> !</div>
                     <button id="login-btn">Se connecter</button>
                     <button id="signup-btn">Créer un compte</button>
                     <button id="logout-btn" class="hidden">Se déconnecter</button>
-                    <button id="profile-btn-menu">Profil</button>
+                    <button id="profil-btn">Profil</button>
                 </div>
             </div>
 
@@ -40,7 +40,7 @@
         <section class="tournaments">
             <h2>Tournois</h2>
             <div class="tournament-card">
-                <div class="tournament-badge">All matches</div>
+                <div class="tournament-badge">Tous les matches</div>
                 <h3>LIGUE FFSU</h3>
                 <p class="tournament-subtitle">Matchs de la semaine</p>
             </div>
@@ -73,7 +73,7 @@
                             <span class="match-time">16/03</span>
                         </div>
                         <div class="team team-away">
-                            <img src="logos/foot-ieseg.png" alt="Foot IESEG">
+                            <img src="logos\foot-ieseg.jpeg" alt="Foot IESEG">
                             <span class="team-name">Foot IESEG</span>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
                             <span class="match-time">17/03</span>
                         </div>
                         <div class="team team-away">
-                            <img src="logos/foot-centrale.png" alt="Foot Centrale">
+                            <img src="logos\foot-centrale.png" alt="Foot Centrale">
                             <span class="team-name">Foot Centrale</span>
                         </div>
                     </div>
@@ -146,7 +146,7 @@
                             <span class="match-time">18/03</span>
                         </div>
                         <div class="team team-away">
-                            <img src="logos/basket-ieseg.png" alt="Basket IESEG">
+                            <img src="logos\basket-ieseg.jpg" alt="Basket IESEG">
                             <span class="team-name">Basket IESEG</span>
                         </div>
                     </div>
@@ -183,7 +183,7 @@
                             <span class="match-time">19/03</span>
                         </div>
                         <div class="team team-away">
-                            <img src="logos/rugby-centrale.png" alt="Rugby Centrale">
+                            <img src="logos\rugby-centrale.png" alt="Rugby Centrale">
                             <span class="team-name">Rugby Centrale</span>
                         </div>
                     </div>
@@ -220,8 +220,8 @@
                             <span class="match-time">20/03</span>
                         </div>
                         <div class="team team-away">
-                            <img src="logos/volley-ieseg.png" alt="Volley IESEG">
-                            <span class="team-name">Volley IESEG</span>
+                            <img src="logos\volley-ipsa.jpg" alt="Volley IPSA">
+                            <span class="team-name">Volley IPSA</span>
                         </div>
                     </div>
                     <div class="betting-options">
@@ -256,8 +256,8 @@
                             <span class="match-time">21/03</span>
                         </div>
                         <div class="team team-away">
-                            <img src="logos/volley-centrale.png" alt="Volley Centrale">
-                            <span class="team-name">Volley Centrale</span>
+                            <img src="logos\volley-ipsa.jpg" alt="Volley IPSA">
+                            <span class="team-name">Volley IPSA Féminines</span>
                         </div>
                     </div>
                     <div class="betting-options">
@@ -330,7 +330,7 @@
                         </div>
                         <div class="team team-away">
                             <img src="logos/hand-ipsa.png" alt="Hand ipsa">
-                            <span class="team-name">Hand IPSA</span>
+                            <span class="team-name">Hand IPSA Féminines</span>
                         </div>
                     </div>
                     <div class="betting-options">
@@ -364,9 +364,21 @@
         </div>
     </div>
 
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <h2>Se connecter</h2>
+
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Mot de passe">
+
+            <button id="login-account-btn">Se connecter</button>
+            <button id="close-login-modal" class="close-btn">Fermer</button>
+        </div>
+    </div>
+
 
     <footer class="bottom-nav">
-        <button class="nav-item">🥐</button>
+        <button class="nav-item">🏆</button>
         <button class="nav-item">⚙️</button>
         <button class="nav-item">📋</button>
         <button class="nav-item">⋮</button>

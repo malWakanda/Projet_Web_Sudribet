@@ -15,19 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ---------- MENU DEROULANT ----------
-    const profileIcon = document.querySelector('.profile-icon');
-    const userProfile = document.querySelector('.user-profile');
-
-    // Création du menu déroulant
-    const dropdown = document.createElement('div');
-    dropdown.className = 'dropdown-menu hidden';
-    dropdown.innerHTML = `
-        <div id="user-info">Vous n'êtes pas connecté</div>
-        <button id="login-btn">Se connecter</button>
-        <button id="signup-btn">Créer un compte</button>
-        <button id="logout-btn" style="display:none;">Se déconnecter</button>
-    `;
-    userProfile.appendChild(dropdown);
+    const profileIcon = document.getElementById('profile-icon');
+    const dropdown = document.querySelector('.dropdown-menu');
 
     dropdown.classList.add('hidden'); // Masqué par défaut
     profileIcon.addEventListener('click', () => {
@@ -44,6 +33,36 @@ document.addEventListener('DOMContentLoaded', function () {
         signupModal.style.display = 'none';
     });
 
+    // ---------- MODAL CONNEXION ----------
+    const loginModal = document.getElementById('login-modal');
+    document.getElementById('login-btn').addEventListener('click', () => {
+        loginModal.style.display = 'flex';
+        dropdown.classList.add('hidden');
+    });
+    document.getElementById('close-login-modal').addEventListener('click', () => {
+        loginModal.style.display = 'none';
+    });
+
+    // ---------- MISE A JOUR DES PARI EN FONCTION DU SCORE ----------
+    const scoreInputs = document.querySelectorAll('.score-input');
+    scoreInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            const container = this.closest('.match-card');
+            const inputs = container.querySelectorAll('.score-input');
+            const homeScore = parseInt(inputs[0].value) || 0;
+            const awayScore = parseInt(inputs[1].value) || 0;
+            const betOptions = container.querySelectorAll('.bet-option');
+            betOptions.forEach(option => option.classList.remove('highlighted'));
+            if (homeScore > awayScore) {
+                betOptions[0].classList.add('highlighted'); // Victoire
+            } else if (homeScore === awayScore) {
+                betOptions[1].classList.add('highlighted'); // Nul
+            } else {
+                betOptions[2].classList.add('highlighted'); // Défaite
+            }
+        });
+    });
+
     // ---------- CREATION DE COMPTE ----------
     document.getElementById('create-account-btn').addEventListener('click', (e) => {
         const name = document.getElementById('signup-name').value.trim();
@@ -52,6 +71,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!name || !email || !password) {
             alert('Merci de remplir tous les champs.');
+            return;
+        }
+
+        // Validation de l'email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Veuillez entrer un email valide.');
+            return;
+        }
+
+        // Validation du mot de passe
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{10,}$/;
+        if (!passwordRegex.test(password)) {
+            alert('Le mot de passe doit contenir au moins 10 caractères, une majuscule, une minuscule, un chiffre et un symbole.');
             return;
         }
 
@@ -68,10 +101,16 @@ document.addEventListener('DOMContentLoaded', function () {
         updateUI();
     });
 
-    // ---------- LOGIN ----------
-    document.getElementById('login-btn').addEventListener('click', () => {
-        const email = prompt("Email :");
-        const password = prompt("Mot de passe :");
+    // ---------- CONNEXION ----------
+    document.getElementById('login-account-btn').addEventListener('click', () => {
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+
+        if (!email || !password) {
+            alert('Merci de remplir tous les champs.');
+            return;
+        }
+
         let users = JSON.parse(localStorage.getItem('users')) || {};
 
         if (!users[email] || users[email].password !== password) {
@@ -81,8 +120,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         localStorage.setItem('currentUser', email);
         alert("Connexion réussie !");
+        loginModal.style.display = 'none';
         updateUI();
-        dropdown.classList.add('hidden');
     });
 
     // ---------- LOGOUT ----------
@@ -99,9 +138,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const users = JSON.parse(localStorage.getItem('users')) || {};
         const userName = userEmail ? users[userEmail].name : null;
 
-        document.getElementById('user-info').innerText = userName
-            ? `Bienvenue, ${userName} !`
-            : "Vous n'êtes pas connecté";
+        const userInfo = document.getElementById('user-info');
+        const profilBtn = document.getElementById('profil-btn');
+
+        if (userEmail) {
+            userInfo.innerText = `Bienvenue, ${userName} !`;
+            userInfo.style.display = 'block';
+            profilBtn.style.display = 'block';
+        } else {
+            userInfo.style.display = 'none';
+            profilBtn.style.display = 'none';
+        }
+
 
         document.getElementById('login-btn').style.display = userEmail ? 'none' : 'block';
         document.getElementById('signup-btn').style.display = userEmail ? 'none' : 'block';
@@ -127,13 +175,6 @@ function filterMatchesBySport(sport, matchCards) {
         }
     });
 }
-// Créer le bouton Profil
-const profilBtn = document.createElement('button');
-profilBtn.textContent = 'Profil';
-profilBtn.addEventListener('click', () => {
-    window.location.href = "profil.html";
-});
-dropdown.appendChild(profilBtn);
 
 // -------------------------------
 //  Animation fadeIn
@@ -145,3 +186,7 @@ style.textContent = `
     to { opacity: 1; transform: translateY(0); }
 }`;
 document.head.appendChild(style);
+
+document.getElementById('profil-btn').addEventListener('click', () => {
+    window.location.href = 'profil.html';
+});
