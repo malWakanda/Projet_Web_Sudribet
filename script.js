@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ---------- CREATION DE COMPTE ----------
-    document.getElementById('create-account-btn').addEventListener('click', (e) => {
+    document.getElementById('create-account-btn').addEventListener('click', async (e) => {
         const name = document.getElementById('signup-name').value.trim();
         const email = document.getElementById('signup-email').value.trim();
         const password = document.getElementById('signup-password').value.trim();
@@ -88,17 +88,62 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Vérifier si l'email existe déjà dans le localStorage
         let users = JSON.parse(localStorage.getItem('users')) || {};
         if (users[email]) {
             alert("Cet email existe déjà !");
             return;
         }
 
-        users[email] = { name, password };
-        localStorage.setItem('users', JSON.stringify(users));
-        alert("Compte créé avec succès !");
-        signupModal.style.display = 'none';
-        updateUI();
+        // Désactiver le bouton pendant l'envoi
+        const createBtn = document.getElementById('create-account-btn');
+        const originalText = createBtn.textContent;
+        createBtn.disabled = true;
+        createBtn.textContent = 'Envoi en cours...';
+
+        try {
+            // Envoyer une requête au backend pour envoyer l'email de confirmation
+            // Le serveur backend tourne dans WSL sur le port 3000
+            const apiUrl = 'http://172.21.181.228:3000';
+            const response = await fetch(`${apiUrl}/api/send-confirmation-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, name, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Sauvegarder temporairement les données utilisateur avec le statut "non confirmé"
+                users[email] = { 
+                    name, 
+                    password,
+                    emailConfirmed: false,
+                    createdAt: new Date().toISOString()
+                };
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                alert(`Un email de confirmation a été envoyé à ${email}. Veuillez vérifier votre boîte de réception et cliquer sur le lien pour activer votre compte.`);
+                signupModal.style.display = 'none';
+                
+                // Réinitialiser le formulaire
+                document.getElementById('signup-name').value = '';
+                document.getElementById('signup-email').value = '';
+                document.getElementById('signup-password').value = '';
+            } else {
+                alert(data.error || 'Erreur lors de l\'envoi de l\'email de confirmation. Veuillez réessayer.');
+            }
+        } catch (error) {
+            console.error('Erreur détaillée:', error);
+            console.error('URL tentée:', 'http://172.21.181.228:3000/api/send-confirmation-email');
+            alert(`Erreur de connexion au serveur.\n\nDétails: ${error.message}\n\nVérifiez que:\n1. Le serveur est démarré dans WSL (npm start)\n2. L'IP de WSL est correcte (actuellement: 172.21.181.228)\n3. Le firewall n'bloque pas le port 3000`);
+        } finally {
+            // Réactiver le bouton
+            createBtn.disabled = false;
+            createBtn.textContent = originalText;
+        }
     });
 
     // ---------- CONNEXION ----------
@@ -115,6 +160,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!users[email] || users[email].password !== password) {
             alert("Email ou mot de passe incorrect.");
+            return;
+        }
+
+        // Vérifier si l'email est confirmé
+        if (users[email].emailConfirmed === false) {
+            alert("Votre compte n'est pas encore activé. Veuillez vérifier votre email et cliquer sur le lien de confirmation.");
             return;
         }
 
