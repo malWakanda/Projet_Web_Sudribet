@@ -1,6 +1,16 @@
 // -------------------------------
 //  Navigation entre les sports
 // -------------------------------
+function getApiBaseUrl() {
+    const meta = document.querySelector('meta[name="api-base-url"]');
+    if (meta && meta.content) return meta.content.replace(/\/$/, '');
+    if (window.API_BASE_URL) return window.API_BASE_URL.replace(/\/$/, '');
+    const { protocol, hostname, port } = window.location;
+    if (protocol === 'file:') return 'http://localhost:3000';
+    const needsPort = !port && (hostname === 'localhost' || hostname === '127.0.0.1');
+    return `${protocol}//${hostname}${needsPort ? ':3000' : port ? `:${port}` : ''}`;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const sportBtns = document.querySelectorAll('.sport-btn');
     const matchCards = document.querySelectorAll('.match-card');
@@ -103,8 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             // Envoyer une requête au backend pour envoyer l'email de confirmation
-            // Le serveur backend tourne dans WSL sur le port 3000
-            const apiUrl = 'http://172.21.181.228:3000';
+            const apiUrl = getApiBaseUrl();
             const response = await fetch(`${apiUrl}/api/send-confirmation-email`, {
                 method: 'POST',
                 headers: {
@@ -137,8 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } catch (error) {
             console.error('Erreur détaillée:', error);
-            console.error('URL tentée:', 'http://172.21.181.228:3000/api/send-confirmation-email');
-            alert(`Erreur de connexion au serveur.\n\nDétails: ${error.message}\n\nVérifiez que:\n1. Le serveur est démarré dans WSL (npm start)\n2. L'IP de WSL est correcte (actuellement: 172.21.181.228)\n3. Le firewall n'bloque pas le port 3000`);
+            console.error('URL tentée:', `${getApiBaseUrl()}/api/send-confirmation-email`);
+            alert(`Erreur de connexion au serveur.\n\nDétails: ${error.message}\n\nVérifiez que:\n1. Le serveur est démarré (npm start)\n2. L'URL API est correcte (${getApiBaseUrl()})\n3. Le firewall ne bloque pas le port 3000`);
         } finally {
             // Réactiver le bouton
             createBtn.disabled = false;
@@ -147,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ---------- CONNEXION ----------
-    document.getElementById('login-account-btn').addEventListener('click', () => {
+    document.getElementById('login-account-btn').addEventListener('click', async () => {
         const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value.trim();
 
@@ -156,23 +165,49 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        const apiUrl = getApiBaseUrl();
         let users = JSON.parse(localStorage.getItem('users')) || {};
 
-        if (!users[email] || users[email].password !== password) {
-            alert("Email ou mot de passe incorrect.");
-            return;
-        }
+        try {
+            const response = await fetch(`${apiUrl}/api/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-        // Vérifier si l'email est confirmé
-        if (users[email].emailConfirmed === false) {
-            alert("Votre compte n'est pas encore activé. Veuillez vérifier votre email et cliquer sur le lien de confirmation.");
-            return;
-        }
+            const data = await response.json();
 
-        localStorage.setItem('currentUser', email);
-        alert("Connexion réussie !");
-        loginModal.style.display = 'none';
-        updateUI();
+            if (!response.ok || !data.success) {
+                throw new Error(data.error || 'Email ou mot de passe incorrect.');
+            }
+
+            // Synchroniser localStorage avec le serveur
+            users[email] = {
+                name: data.user.name,
+                password,
+                emailConfirmed: true,
+                confirmedAt: data.user.confirmedAt || new Date().toISOString()
+            };
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', email);
+            alert("Connexion réussie !");
+            loginModal.style.display = 'none';
+            updateUI();
+        } catch (err) {
+            // Fallback local si le serveur est injoignable mais que les données locales existent
+            if (!users[email] || users[email].password !== password) {
+                alert(err.message || "Email ou mot de passe incorrect.");
+                return;
+            }
+            if (users[email].emailConfirmed === false) {
+                alert("Votre compte n'est pas encore activé. Veuillez vérifier votre email et cliquer sur le lien de confirmation.");
+                return;
+            }
+            localStorage.setItem('currentUser', email);
+            alert("Connexion réussie (mode local) !");
+            loginModal.style.display = 'none';
+            updateUI();
+        }
     });
 
     // ---------- LOGOUT ----------

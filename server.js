@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const brevo = require('@getbrevo/brevo');
 require('dotenv').config();
-const crypto = require('crypto');
+const crypto = require('crypto'); // built-in
 const fs = require('fs');
 const path = require('path');
 
@@ -35,10 +35,51 @@ const apiInstance = new brevo.TransactionalEmailsApi();
 
 // Stockage temporaire des tokens de confirmation (en production, utilisez une base de données)
 const emailTokens = {};
+const usersFilePath = path.join(__dirname, 'users.json');
 
 // Fonction pour générer un token de confirmation
 function generateToken() {
     return crypto.randomBytes(32).toString('hex');
+}
+
+function getApiBaseUrl(req) {
+    const envUrl = (process.env.API_BASE_URL || process.env.API_URL || '').trim();
+    if (envUrl) return envUrl.replace(/\/$/, '');
+
+    const origin = (req.headers.origin || '').trim();
+    if (origin) return origin.replace(/\/$/, '');
+
+    const hostname = req.hostname || 'localhost';
+    return `http://${hostname}:3000`;
+}
+
+function getClientBaseUrl(req) {
+    const envClient = (process.env.CLIENT_BASE_URL || process.env.CLIENT_URL || '').trim();
+    if (envClient) return envClient.replace(/\/$/, '');
+
+    const origin = (req.headers.origin || '').trim();
+    if (origin) return origin.replace(/\/$/, '');
+
+    const hostname = req.hostname || 'localhost';
+    const portGuess = hostname === 'localhost' || hostname === '127.0.0.1' ? '5500' : '3000';
+    return `http://${hostname}:${portGuess}`;
+}
+
+function readUsersFileSafe() {
+    if (!fs.existsSync(usersFilePath)) {
+        return {};
+    }
+
+    const raw = fs.readFileSync(usersFilePath, 'utf8');
+    if (!raw.trim()) {
+        return {};
+    }
+
+    try {
+        return JSON.parse(raw);
+    } catch (err) {
+        throw new Error('Fichier users.json invalide (JSON non parsable)');
+    }
 }
 
 // Route de test pour vérifier que le serveur fonctionne
@@ -79,10 +120,9 @@ app.post('/api/send-confirmation-email', async (req, res) => {
             createdAt: Date.now()
         };
 
-        // Créer le lien de confirmation
-        // Utiliser l'IP de WSL pour que le lien fonctionne depuis Windows
-        const wslIp = '172.21.181.228';
-        const confirmationLink = `http://${wslIp}:5500/confirm-email.html?token=${token}`;
+        // Créer le lien de confirmation basé sur la configuration dynamique
+        const clientBaseUrl = getClientBaseUrl(req);
+        const confirmationLink = `${clientBaseUrl}/confirm-email.html?token=${token}`;
 
         // Préparer l'email
         const sendSmtpEmail = {
@@ -170,12 +210,14 @@ app.post('/api/confirm-email', (req, res) => {
         }
 
         // Lire les utilisateurs existants
-        const usersFilePath = path.join(__dirname, 'users.json');
         let users = {};
-        
-        if (fs.existsSync(usersFilePath)) {
-            const usersData = fs.readFileSync(usersFilePath, 'utf8');
-            users = JSON.parse(usersData);
+        try {
+            users = readUsersFileSafe();
+        } catch (fileError) {
+            return res.status(500).json({ 
+                error: 'Base utilisateurs illisible',
+                details: fileError.message 
+            });
         }
 
         // Ajouter l'utilisateur avec le statut confirmé
@@ -206,6 +248,55 @@ app.post('/api/confirm-email', (req, res) => {
         res.status(500).json({ 
             error: 'Erreur lors de la confirmation de l\'email',
             details: error.message 
+        });
+    }
+});
+
+// Route de login pour synchroniser le front avec la base fichier
+app.post('/api/login', (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email et mot de passe requis' });
+        }
+
+        let users = {};
+        try {
+            users = readUsersFileSafe();
+        } catch (fileError) {
+            return res.status(500).json({
+                error: 'Base utilisateurs illisible',
+                details: fileError.message
+            });
+        }
+
+        const user = users[email];
+        if (!user) {
+            return res.status(404).json({ error: 'Utilisateur introuvable' });
+        }
+
+        if (!user.emailConfirmed) {
+            return res.status(403).json({ error: 'Email non confirmé' });
+        }
+
+        if (user.password !== password) {
+            return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
+        }
+
+        return res.json({
+            success: true,
+            user: {
+                email: user.email,
+                name: user.name,
+                emailConfirmed: true,
+                confirmedAt: user.confirmedAt
+            }
+        });
+    } catch (error) {
+        console.error('Erreur lors du login API:', error);
+        res.status(500).json({
+            error: 'Erreur serveur lors du login',
+            details: error.message
         });
     }
 });
@@ -251,7 +342,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`Le serveur est accessible sur:`);
     console.log(`  - http://localhost:${PORT}`);
     console.log(`  - http://127.0.0.1:${PORT}`);
-    console.log(`  - http://172.21.181.228:${PORT} (IP WSL)`);
+    console.log(`  - ${process.env.API_BASE_URL || 'http://<votre-ip>:3000'} (API_BASE_URL configurable)`);
     console.log(`========================================`);
 });
 

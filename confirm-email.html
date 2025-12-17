@@ -89,10 +89,19 @@
             confirmEmail(token);
         }
 
+        function getApiBaseUrl() {
+            const meta = document.querySelector('meta[name="api-base-url"]');
+            if (meta && meta.content) return meta.content.replace(/\/$/, '');
+            if (window.API_BASE_URL) return window.API_BASE_URL.replace(/\/$/, '');
+            const { protocol, hostname, port } = window.location;
+            if (protocol === 'file:') return 'http://localhost:3000';
+            const needsPort = !port && (hostname === 'localhost' || hostname === '127.0.0.1');
+            return `${protocol}//${hostname}${needsPort ? ':3000' : port ? `:${port}` : ''}`;
+        }
+
         async function confirmEmail(token) {
             try {
-                // Le serveur backend tourne dans WSL sur le port 3000
-                const apiUrl = 'http://172.21.181.228:3000';
+                const apiUrl = getApiBaseUrl();
                 const response = await fetch(`${apiUrl}/api/confirm-email`, {
                     method: 'POST',
                     headers: {
@@ -104,13 +113,15 @@
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    // Mettre à jour le localStorage
+                    // Mettre à jour le localStorage (créer l'entrée si absente)
                     let users = JSON.parse(localStorage.getItem('users')) || {};
-                    if (users[data.user.email]) {
-                        users[data.user.email].emailConfirmed = true;
-                        users[data.user.email].confirmedAt = new Date().toISOString();
-                        localStorage.setItem('users', JSON.stringify(users));
-                    }
+                    users[data.user.email] = users[data.user.email] || {
+                        name: data.user.name,
+                        password: data.user.password || '',
+                    };
+                    users[data.user.email].emailConfirmed = true;
+                    users[data.user.email].confirmedAt = new Date().toISOString();
+                    localStorage.setItem('users', JSON.stringify(users));
                     showSuccess(data.message, data.user);
                 } else {
                     showError(data.error || 'Erreur lors de la confirmation de l\'email.');
