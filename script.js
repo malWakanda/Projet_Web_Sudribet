@@ -1,6 +1,16 @@
 // -------------------------------
 //  Navigation entre les sports
 // -------------------------------
+function getApiBaseUrl() {
+    const meta = document.querySelector('meta[name="api-base-url"]');
+    if (meta && meta.content) return meta.content.replace(/\/$/, '');
+    if (window.API_BASE_URL) return window.API_BASE_URL.replace(/\/$/, '');
+    const { protocol, hostname, port } = window.location;
+    if (protocol === 'file:') return 'http://localhost:3000';
+    const needsPort = !port && (hostname === 'localhost' || hostname === '127.0.0.1');
+    return `${protocol}//${hostname}${needsPort ? ':3000' : port ? `:${port}` : ''}`;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const sportBtns = document.querySelectorAll('.sport-btn');
     const matchCards = document.querySelectorAll('.match-card');
@@ -43,6 +53,74 @@ document.addEventListener('DOMContentLoaded', function () {
         loginModal.style.display = 'none';
     });
 
+    // ---------- MODAL MOT DE PASSE OUBLIÉ ----------
+    const forgotPasswordModal = document.getElementById('forgot-password-modal');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+    
+    forgotPasswordLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginModal.style.display = 'none';
+        forgotPasswordModal.style.display = 'flex';
+    });
+
+    document.getElementById('close-forgot-password-modal').addEventListener('click', () => {
+        forgotPasswordModal.style.display = 'none';
+        // Réinitialiser le formulaire
+        document.getElementById('forgot-password-email').value = '';
+    });
+
+    // ---------- ENVOI EMAIL RÉINITIALISATION ----------
+    document.getElementById('send-reset-email-btn').addEventListener('click', async () => {
+        const email = document.getElementById('forgot-password-email').value.trim();
+
+        if (!email) {
+            alert('Veuillez entrer votre adresse email.');
+            return;
+        }
+
+        // Validation de l'email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Veuillez entrer un email valide.');
+            return;
+        }
+
+        // Désactiver le bouton pendant l'envoi
+        const sendBtn = document.getElementById('send-reset-email-btn');
+        const originalText = sendBtn.textContent;
+        sendBtn.disabled = true;
+        sendBtn.textContent = 'Envoi en cours...';
+
+        try {
+            const apiUrl = getApiBaseUrl();
+            const response = await fetch(`${apiUrl}/api/forgot-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                alert('Si cet email existe dans notre système, vous recevrez un email avec les instructions pour réinitialiser votre mot de passe.');
+                forgotPasswordModal.style.display = 'none';
+                // Réinitialiser le formulaire
+                document.getElementById('forgot-password-email').value = '';
+            } else {
+                alert(data.error || 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer.');
+            }
+        } catch (error) {
+            console.error('Erreur détaillée:', error);
+            alert(`Erreur de connexion au serveur.\n\nDétails: ${error.message}\n\nVérifiez que:\n1. Le serveur est démarré (npm start)\n2. L'URL API est correcte (${getApiBaseUrl()})\n3. Le firewall ne bloque pas le port 3000`);
+        } finally {
+            // Réactiver le bouton
+            sendBtn.disabled = false;
+            sendBtn.textContent = originalText;
+        }
+    });
+
     // ---------- MISE A JOUR DES PARI EN FONCTION DU SCORE ----------
     const scoreInputs = document.querySelectorAll('.score-input');
     scoreInputs.forEach(input => {
@@ -64,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ---------- CREATION DE COMPTE ----------
-    document.getElementById('create-account-btn').addEventListener('click', (e) => {
+    document.getElementById('create-account-btn').addEventListener('click', async (e) => {
         const name = document.getElementById('signup-name').value.trim();
         const email = document.getElementById('signup-email').value.trim();
         const password = document.getElementById('signup-password').value.trim();
@@ -88,21 +166,65 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Vérifier si l'email existe déjà dans le localStorage
         let users = JSON.parse(localStorage.getItem('users')) || {};
         if (users[email]) {
             alert("Cet email existe déjà !");
             return;
         }
 
-        users[email] = { name, password };
-        localStorage.setItem('users', JSON.stringify(users));
-        alert("Compte créé avec succès !");
-        signupModal.style.display = 'none';
-        updateUI();
+        // Désactiver le bouton pendant l'envoi
+        const createBtn = document.getElementById('create-account-btn');
+        const originalText = createBtn.textContent;
+        createBtn.disabled = true;
+        createBtn.textContent = 'Envoi en cours...';
+
+        try {
+            // Envoyer une requête au backend pour envoyer l'email de confirmation
+            const apiUrl = getApiBaseUrl();
+            const response = await fetch(`${apiUrl}/api/send-confirmation-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, name, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Sauvegarder temporairement les données utilisateur avec le statut "non confirmé"
+                users[email] = { 
+                    name, 
+                    password,
+                    emailConfirmed: false,
+                    createdAt: new Date().toISOString()
+                };
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                alert(`Un email de confirmation a été envoyé à ${email}. Veuillez vérifier votre boîte de réception et cliquer sur le lien pour activer votre compte.`);
+                signupModal.style.display = 'none';
+                
+                // Réinitialiser le formulaire
+                document.getElementById('signup-name').value = '';
+                document.getElementById('signup-email').value = '';
+                document.getElementById('signup-password').value = '';
+            } else {
+                alert(data.error || 'Erreur lors de l\'envoi de l\'email de confirmation. Veuillez réessayer.');
+            }
+        } catch (error) {
+            console.error('Erreur détaillée:', error);
+            console.error('URL tentée:', `${getApiBaseUrl()}/api/send-confirmation-email`);
+            alert(`Erreur de connexion au serveur.\n\nDétails: ${error.message}\n\nVérifiez que:\n1. Le serveur est démarré (npm start)\n2. L'URL API est correcte (${getApiBaseUrl()})\n3. Le firewall ne bloque pas le port 3000`);
+        } finally {
+            // Réactiver le bouton
+            createBtn.disabled = false;
+            createBtn.textContent = originalText;
+        }
     });
 
     // ---------- CONNEXION ----------
-    document.getElementById('login-account-btn').addEventListener('click', () => {
+    document.getElementById('login-account-btn').addEventListener('click', async () => {
         const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value.trim();
 
@@ -111,17 +233,49 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        const apiUrl = getApiBaseUrl();
         let users = JSON.parse(localStorage.getItem('users')) || {};
 
-        if (!users[email] || users[email].password !== password) {
-            alert("Email ou mot de passe incorrect.");
-            return;
-        }
+        try {
+            const response = await fetch(`${apiUrl}/api/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-        localStorage.setItem('currentUser', email);
-        alert("Connexion réussie !");
-        loginModal.style.display = 'none';
-        updateUI();
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.error || 'Email ou mot de passe incorrect.');
+            }
+
+            // Synchroniser localStorage avec le serveur
+            users[email] = {
+                name: data.user.name,
+                password,
+                emailConfirmed: true,
+                confirmedAt: data.user.confirmedAt || new Date().toISOString()
+            };
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', email);
+            alert("Connexion réussie !");
+            loginModal.style.display = 'none';
+            updateUI();
+        } catch (err) {
+            // Fallback local si le serveur est injoignable mais que les données locales existent
+            if (!users[email] || users[email].password !== password) {
+                alert(err.message || "Email ou mot de passe incorrect.");
+                return;
+            }
+            if (users[email].emailConfirmed === false) {
+                alert("Votre compte n'est pas encore activé. Veuillez vérifier votre email et cliquer sur le lien de confirmation.");
+                return;
+            }
+            localStorage.setItem('currentUser', email);
+            alert("Connexion réussie (mode local) !");
+            loginModal.style.display = 'none';
+            updateUI();
+        }
     });
 
     // ---------- LOGOUT ----------
@@ -140,14 +294,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const userInfo = document.getElementById('user-info');
         const profilBtn = document.getElementById('profil-btn');
+        const userNameSpan = document.querySelector('.user-name');
 
-        if (userEmail) {
+        if (userEmail && userName) {
             userInfo.innerText = `Bienvenue, ${userName} !`;
             userInfo.style.display = 'block';
             profilBtn.style.display = 'block';
+            // Mettre à jour le nom d'utilisateur dans le header
+            if (userNameSpan) {
+                userNameSpan.textContent = userName;
+            }
         } else {
             userInfo.style.display = 'none';
             profilBtn.style.display = 'none';
+            // Réinitialiser le texte si déconnecté
+            if (userNameSpan) {
+                userNameSpan.textContent = 'Connectez vous!';
+            }
         }
 
 
@@ -157,6 +320,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updateUI();
+
+    // ---------- SECTION NAVIGATION ----------
+    function showSection(sectionId) {
+        document.querySelectorAll('main > section').forEach(section => {
+            section.style.display = 'none';
+        });
+        const activeSection = document.getElementById(sectionId);
+        if (activeSection) {
+            activeSection.style.display = 'block';
+        }
+    }
+
+    function handleHashChange() {
+        const hash = window.location.hash.substring(1) || 'accueil';
+        showSection(hash);
+    }
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // Initial load
 });
 
 // -------------------------------
@@ -177,8 +359,18 @@ function filterMatchesBySport(sport, matchCards) {
 }
 
 // -------------------------------
-//  Animation fadeIn
+//  CLASSIFICATIONS TAB FUNCTION
 // -------------------------------
+function showTab(sportId) {
+    // Masquer tous les contenus
+    document.querySelectorAll('.ranking-content').forEach(el => el.classList.remove('active'));
+    // Désactiver tous les boutons
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    
+    // Activer le contenu et le bouton sélectionnés
+    document.getElementById(sportId).classList.add('active');
+    event.target.classList.add('active');
+}
 const style = document.createElement('style');
 style.textContent = `
 @keyframes fadeIn {

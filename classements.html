@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classements - Paris Sport ESME</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 8px 20px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: #FF6B35;
+            color: white;
+            border-color: #FF6B35;
+        }
+        
+        .ranking-table-container {
+            background: white;
+            margin: 0 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.8em;
+            color: #666;
+            text-transform: uppercase;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .rank-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .rank-1 { background: #fff3cd; color: #856404; }
+        .rank-2 { background: #e2e3e5; color: #383d41; }
+        .rank-3 { background: #fce8e6; color: #721c24; }
+        
+        .points { font-weight: bold; color: #FF6B35; }
+        
+        .ranking-content { display: none; }
+        .ranking-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><a href="index.html" style="text-decoration:none; color:inherit;">Paris Sport ESME</a></h1>
+        </div>
+    </header>
+
+    <main>
+        <h2 style="padding: 20px;">Classements</h2>
+
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="showTab('football')">Football</button>
+            <button class="tab-btn" onclick="showTab('rugby')">Rugby</button>
+            <button class="tab-btn" onclick="showTab('basket')">Basket</button>
+        </div>
+
+        <div class="ranking-table-container">
+            <!-- Football Table -->
+            <div id="football" class="ranking-content active">
+                <table>
+                    <thead><tr><th>#</th><th>Équipe</th><th>MJ</th><th>Pts</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="rank-circle rank-1">1</span></td><td>FC Campus</td><td>5</td><td class="points">15</td></tr>
+                        <tr><td><span class="rank-circle rank-2">2</span></td><td>Polytech</td><td>5</td><td class="points">12</td></tr>
+                        <tr><td><span class="rank-circle rank-3">3</span></td><td>Les Aigles</td><td>5</td><td class="points">9</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Rugby Table -->
+            <div id="rugby" class="ranking-content">
+                <table>
+                    <thead><tr><th>#</th><th>Équipe</th><th>MJ</th><th>Pts</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="rank-circle rank-1">1</span></td><td>Les Ovales</td><td>4</td><td class="points">20</td></tr>
+                        <tr><td><span class="rank-circle rank-2">2</span></td><td>XV de France</td><td>4</td><td class="points">15</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Basket Table -->
+            <div id="basket" class="ranking-content">
+                <table>
+                    <thead><tr><th>#</th><th>Équipe</th><th>MJ</th><th>Pts</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="rank-circle rank-1">1</span></td><td>Dunkers</td><td>6</td><td class="points">18</td></tr>
+                        <tr><td><span class="rank-circle rank-2">2</span></td><td>IUT Basket</td><td>6</td><td class="points">14</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showTab(sportId) {
+            // Masquer tous les contenus
+            document.querySelectorAll('.ranking-content').forEach(el => el.classList.remove('active'));
+            // Désactiver tous les boutons
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            // Activer le contenu et le bouton sélectionnés
+            document.getElementById(sportId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>

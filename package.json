@@ -4,14 +4,17 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@getbrevo/brevo": "^1.0.0",
     "body-parser": "^2.2.1",
+    "dotenv": "^16.3.1",
     "express": "^5.2.1",
     "fs": "^0.0.1-security"
   }
