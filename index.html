@@ -19,7 +19,7 @@
         <div class="header-content">
             <h1>Paris Sport ESME</h1>
             <div class="user-profile">
-                <span class="user-name">Connectez vous!</span>
+                <span class="user-name"></span>
                 <div class="profile-icon" id="profile-icon">+</div>
 
                 <!-- Menu déroulant -->
@@ -28,7 +28,6 @@
                     <button id="login-btn">Se connecter</button>
                     <button id="signup-btn">Créer un compte</button>
                     <button id="logout-btn" class="hidden">Se déconnecter</button>
-                    <a href="classements.html" style="text-decoration:none; width:100%;"><button id="classements-btn" style="width:100%;">Classements</button></a>
                 </div>
             </div>
 
@@ -61,8 +60,10 @@
                 <button class="sport-btn" data-sport="hand" title="Hand">🤾</button>
             </div>
             <div class="matches-container">
+
                 <!-- FOOTBALL MATCHES -->
-                <div class="match-card" data-sport="football">
+                 
+                <div class="match-card" data-sport="football" data-match-id="match_1">
                     <div class="match-header">
                         <span class="live-badge">LIVE</span>
                     </div>
@@ -72,16 +73,15 @@
                             <span class="team-name">Foot ESME 1</span>
                         </div>
                         <div class="score-input-container">
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="match-time">16/03</span>
+                            <span class="vs-badge" style="font-size: 1.5em; font-weight: 800; color: #333;">VS</span>
+                            <span class="match-time" style="display: block; margin-top: 5px; color: #FF6B35; font-weight: bold;">16/03</span>
                         </div>
                         <div class="team team-away">
-                            <img src="logos\foot-ieseg.jpeg" alt="Foot IESEG">
+                            <img src="logos/foot-ieseg.jpeg" alt="Foot IESEG">
                             <span class="team-name">Foot IESEG</span>
                         </div>
                     </div>
+                    
                     <div class="betting-options">
                         <div class="bet-option">
                             <div class="bet-label">Victoire</div>
@@ -96,6 +96,10 @@
                             <div class="bet-value">1.3</div>
                         </div>
                     </div>
+
+                    <button class="validate-bet-btn hidden" style="width: 100%; margin-top: 15px; padding: 12px; background-color: #ec780a; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+                        Valider le pari (10 coins)
+                    </button>
                 </div>
 
                 <div class="match-card" data-sport="football">
@@ -108,10 +112,8 @@
                             <span class="team-name">Foot ESME Féminines</span>
                         </div>
                         <div class="score-input-container">
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="match-time">17/03</span>
+                            <span class="vs-badge" style="font-size: 1.5em; font-weight: 700; color: #333;">VS</span>
+                            <span class="match-time" style="display: block; margin-top: 5px; color: #FF6B35; font-weight: bold;">17/03</span>
                         </div>
                         <div class="team team-away">
                             <img src="logos\foot-centrale.png" alt="Foot Centrale">
@@ -132,6 +134,10 @@
                             <div class="bet-value">1.6</div>
                         </div>
                     </div>
+
+                    <button class="validate-bet-btn hidden" style="width: 100%; margin-top: 15px; padding: 12px; background-color: #ec780a; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+                        Valider le pari (10 coins)
+                    </button>
                 </div>
 
                 <!-- BASKETBALL MATCHES -->
@@ -145,10 +151,8 @@
                             <span class="team-name">Basket ESME</span>
                         </div>
                         <div class="score-input-container">
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="match-time">18/03</span>
+                            <span class="vs-badge" style="font-size: 1.5em; font-weight: 700; color: #333;">VS</span>
+                            <span class="match-time" style="display: block; margin-top: 5px; color: #FF6B35; font-weight: bold;">18/03</span>
                         </div>
                         <div class="team team-away">
                             <img src="logos\basket-ieseg.jpg" alt="Basket IESEG">
@@ -169,6 +173,10 @@
                             <div class="bet-value">1.4</div>
                         </div>
                     </div>
+
+                    <button class="validate-bet-btn hidden" style="width: 100%; margin-top: 15px; padding: 12px; background-color: #ec780a; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+                        Valider le pari (10 coins)
+                    </button>
                 </div>
 
                 <!-- RUGBY MATCHES -->
@@ -182,10 +190,8 @@
                             <span class="team-name">Rugby ESME</span>
                         </div>
                         <div class="score-input-container">
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="match-time">19/03</span>
+                            <span class="vs-badge" style="font-size: 1.5em; font-weight: 700; color: #333;">VS</span>
+                            <span class="match-time" style="display: block; margin-top: 5px; color: #FF6B35; font-weight: bold;">19/03</span>
                         </div>
                         <div class="team team-away">
                             <img src="logos\rugby-centrale.png" alt="Rugby Centrale">
@@ -206,6 +212,10 @@
                             <div class="bet-value">1.5</div>
                         </div>
                     </div>
+
+                    <button class="validate-bet-btn hidden" style="width: 100%; margin-top: 15px; padding: 12px; background-color: #ec780a; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+                        Valider le pari (10 coins)
+                    </button>
                 </div>
 
                 <!-- VOLLEY MATCHES -->
@@ -219,10 +229,8 @@
                             <span class="team-name">Volley ESME Équipe 1</span>
                         </div>
                         <div class="score-input-container">
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="match-time">20/03</span>
+                            <span class="vs-badge" style="font-size: 1.5em; font-weight: 700; color: #333;">VS</span>
+                            <span class="match-time" style="display: block; margin-top: 5px; color: #FF6B35; font-weight: bold;">20/03</span>
                         </div>
                         <div class="team team-away">
                             <img src="logos\volley-ipsa.jpg" alt="Volley IPSA">
@@ -243,6 +251,10 @@
                             <div class="bet-value">1.8</div>
                         </div>
                     </div>
+
+                    <button class="validate-bet-btn hidden" style="width: 100%; margin-top: 15px; padding: 12px; background-color: #ec780a; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+                        Valider le pari (10 coins)
+                    </button>
                 </div>
 
                 <div class="match-card" data-sport="volley" style="display:none;">
@@ -255,10 +267,8 @@
                             <span class="team-name">Volley ESME Féminines</span>
                         </div>
                         <div class="score-input-container">
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="match-time">21/03</span>
+                            <span class="vs-badge" style="font-size: 1.5em; font-weight: 700; color: #333;">VS</span>
+                            <span class="match-time" style="display: block; margin-top: 5px; color: #FF6B35; font-weight: bold;">21/03</span>
                         </div>
                         <div class="team team-away">
                             <img src="logos\volley-ipsa.jpg" alt="Volley IPSA">
@@ -279,6 +289,10 @@
                             <div class="bet-value">1.5</div>
                         </div>
                     </div>
+
+                    <button class="validate-bet-btn hidden" style="width: 100%; margin-top: 15px; padding: 12px; background-color: #ec780a; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+                        Valider le pari (10 coins)
+                    </button>
                 </div>
 
                 <!-- HAND MATCHES -->
@@ -292,10 +306,8 @@
                             <span class="team-name">Hand ESME</span>
                         </div>
                         <div class="score-input-container">
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="match-time">16/03</span>
+                            <span class="vs-badge" style="font-size: 1.5em; font-weight: 700; color: #333;">VS</span>
+                            <span class="match-time" style="display: block; margin-top: 5px; color: #FF6B35; font-weight: bold;">16/03</span>
                         </div>
                         <div class="team team-away">
                             <img src="logos/hand-ieseg.png" alt="hand-ieseg">
@@ -316,6 +328,10 @@
                             <div class="bet-value">1.3</div>
                         </div>
                     </div>
+
+                    <button class="validate-bet-btn hidden" style="width: 100%; margin-top: 15px; padding: 12px; background-color: #ec780a; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+                        Valider le pari (10 coins)
+                    </button>
                 </div>
 
                 <div class="match-card" data-sport="hand" style="display:none;">
@@ -328,10 +344,8 @@
                             <span class="team-name">Hand ESME Féminines</span>
                         </div>
                         <div class="score-input-container">
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" class="score-input" placeholder="0" min="0">
-                            <span class="match-time">22/03</span>
+                            <span class="vs-badge" style="font-size: 1.5em; font-weight: 700; color: #333;">VS</span>
+                            <span class="match-time" style="display: block; margin-top: 5px; color: #FF6B35; font-weight: bold;">22/03</span>
                         </div>
                         <div class="team team-away">
                             <img src="logos/hand-ipsa.png" alt="Hand ipsa">
@@ -352,6 +366,10 @@
                             <div class="bet-value">1.6</div>
                         </div>
                     </div>
+
+                    <button class="validate-bet-btn hidden" style="width: 100%; margin-top: 15px; padding: 12px; background-color: #ec780a; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+                        Valider le pari (10 coins)
+                    </button>
                 </div>
             </div>
         </section>
@@ -692,14 +710,19 @@
         </div>
     </section>
 </main>
+    
+
+    <main>
+        <section id="accueil">
+           </section>
+        </main>
+
     <div class="modal" id="signup-modal">
         <div class="modal-content">
             <h2>Créer un compte</h2>
-
             <input type="text" id="signup-name" placeholder="Nom complet">
             <input type="email" id="signup-email" placeholder="Email">
             <input type="password" id="signup-password" placeholder="Mot de passe">
-
             <button id="create-account-btn">Créer mon compte</button>
             <button id="close-modal" class="close-btn">Fermer</button>
         </div>
@@ -708,12 +731,9 @@
     <div class="modal" id="login-modal">
         <div class="modal-content">
             <h2>Se connecter</h2>
-
             <input type="email" id="login-email" placeholder="Email">
             <input type="password" id="login-password" placeholder="Mot de passe">
-
             <a href="#" id="forgot-password-link" style="display: block; text-align: right; margin: 10px 0; color: #FF6B35; text-decoration: none; font-size: 14px;">Mot de passe oublié ?</a>
-
             <button id="login-account-btn">Se connecter</button>
             <button id="close-login-modal" class="close-btn">Fermer</button>
         </div>
@@ -723,9 +743,7 @@
         <div class="modal-content">
             <h2>Mot de passe oublié</h2>
             <p style="margin-bottom: 20px; color: #666;">Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.</p>
-
             <input type="email" id="forgot-password-email" placeholder="Email">
-
             <button id="send-reset-email-btn">Envoyer l'email de réinitialisation</button>
             <button id="close-forgot-password-modal" class="close-btn">Fermer</button>
         </div>
@@ -736,9 +754,6 @@
     <script src="GradientText.js" defer></script>
     <script src="PillNav.js" defer></script>
     <script src="script.js" defer></script>
-    </body>
-
-
+    
 </body>
-
 </html>

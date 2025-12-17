@@ -419,6 +419,10 @@ main {
     z-index: 100;
 }
 
+.hidden {
+    display: none;
+}
+
 .dropdown-menu.hidden {
     display: none;
 }
@@ -632,4 +636,31 @@ body.profil-page header {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Rend les options cliquables (petite main) */
+.bet-option {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #eee; /* Bordure légère par défaut */
+}
+
+/* Effet quand on passe la souris dessus */
+.bet-option:hover {
+    background-color: #f9f9f9;
+    transform: translateY(-2px);
+    border-color: #ddd;
+}
+
+/* L'ÉTAT SÉLECTIONNÉ (Orange) */
+.bet-option.selected {
+    background-color: #FF6B35;
+    color: white;
+    border-color: #FF6B35;
+    box-shadow: 0 4px 6px rgba(255, 107, 53, 0.3);
+}
+
+/* Pour cacher le bouton Valider tant qu'on n'a pas choisi */
+.hidden {
+    display: none !important;
 }
