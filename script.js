@@ -28,300 +28,291 @@ document.addEventListener('DOMContentLoaded', function () {
     const profileIcon = document.getElementById('profile-icon');
     const dropdown = document.querySelector('.dropdown-menu');
 
-    dropdown.classList.add('hidden'); // Masqué par défaut
-    profileIcon.addEventListener('click', () => {
-        dropdown.classList.toggle('hidden');
-    });
+    if (profileIcon && dropdown) {
+        dropdown.classList.add('hidden'); // Masqué par défaut
+        profileIcon.addEventListener('click', () => {
+            dropdown.classList.toggle('hidden');
+        });
+    }
 
-    // ---------- MODAL CREATION DE COMPTE ----------
+    // ---------- GESTION DES MODALES ----------
     const signupModal = document.getElementById('signup-modal');
-    document.getElementById('signup-btn').addEventListener('click', () => {
-        signupModal.style.display = 'flex';
-        dropdown.classList.add('hidden');
-    });
-    document.getElementById('close-modal').addEventListener('click', () => {
-        signupModal.style.display = 'none';
-    });
+    const signupBtn = document.getElementById('signup-btn');
+    if(signupBtn) {
+        signupBtn.addEventListener('click', () => {
+            signupModal.style.display = 'flex';
+            if(dropdown) dropdown.classList.add('hidden');
+        });
+    }
+    
+    const closeModal = document.getElementById('close-modal');
+    if(closeModal) {
+        closeModal.addEventListener('click', () => {
+            signupModal.style.display = 'none';
+        });
+    }
 
-    // ---------- MODAL CONNEXION ----------
     const loginModal = document.getElementById('login-modal');
-    document.getElementById('login-btn').addEventListener('click', () => {
-        loginModal.style.display = 'flex';
-        dropdown.classList.add('hidden');
-    });
-    document.getElementById('close-login-modal').addEventListener('click', () => {
-        loginModal.style.display = 'none';
-    });
+    const loginBtn = document.getElementById('login-btn');
+    if(loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+            if(dropdown) dropdown.classList.add('hidden');
+        });
+    }
+
+    const closeLoginModal = document.getElementById('close-login-modal');
+    if(closeLoginModal) {
+        closeLoginModal.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+    }
 
     // ---------- MODAL MOT DE PASSE OUBLIÉ ----------
     const forgotPasswordModal = document.getElementById('forgot-password-modal');
     const forgotPasswordLink = document.getElementById('forgot-password-link');
     
-    forgotPasswordLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginModal.style.display = 'none';
-        forgotPasswordModal.style.display = 'flex';
-    });
+    if(forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'none';
+            forgotPasswordModal.style.display = 'flex';
+        });
+    }
 
-    document.getElementById('close-forgot-password-modal').addEventListener('click', () => {
-        forgotPasswordModal.style.display = 'none';
-        // Réinitialiser le formulaire
-        document.getElementById('forgot-password-email').value = '';
-    });
+    const closeForgotModal = document.getElementById('close-forgot-password-modal');
+    if(closeForgotModal) {
+        closeForgotModal.addEventListener('click', () => {
+            forgotPasswordModal.style.display = 'none';
+            document.getElementById('forgot-password-email').value = '';
+        });
+    }
 
     // ---------- ENVOI EMAIL RÉINITIALISATION ----------
-    document.getElementById('send-reset-email-btn').addEventListener('click', async () => {
-        const email = document.getElementById('forgot-password-email').value.trim();
-
-        if (!email) {
-            alert('Veuillez entrer votre adresse email.');
-            return;
-        }
-
-        // Validation de l'email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('Veuillez entrer un email valide.');
-            return;
-        }
-
-        // Désactiver le bouton pendant l'envoi
-        const sendBtn = document.getElementById('send-reset-email-btn');
-        const originalText = sendBtn.textContent;
-        sendBtn.disabled = true;
-        sendBtn.textContent = 'Envoi en cours...';
-
-        try {
-            const apiUrl = getApiBaseUrl();
-            const response = await fetch(`${apiUrl}/api/forgot-password`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email })
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                alert('Si cet email existe dans notre système, vous recevrez un email avec les instructions pour réinitialiser votre mot de passe.');
-                forgotPasswordModal.style.display = 'none';
-                // Réinitialiser le formulaire
-                document.getElementById('forgot-password-email').value = '';
-            } else {
-                alert(data.error || 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer.');
-            }
-        } catch (error) {
-            console.error('Erreur détaillée:', error);
-            alert(`Erreur de connexion au serveur.\n\nDétails: ${error.message}\n\nVérifiez que:\n1. Le serveur est démarré (npm start)\n2. L'URL API est correcte (${getApiBaseUrl()})\n3. Le firewall ne bloque pas le port 3000`);
-        } finally {
-            // Réactiver le bouton
-            sendBtn.disabled = false;
-            sendBtn.textContent = originalText;
-        }
-    });
-
-    // ---------- MISE A JOUR DES PARI EN FONCTION DU SCORE ----------
-    const scoreInputs = document.querySelectorAll('.score-input');
-    scoreInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            const container = this.closest('.match-card');
-            const inputs = container.querySelectorAll('.score-input');
-            const homeScore = parseInt(inputs[0].value) || 0;
-            const awayScore = parseInt(inputs[1].value) || 0;
-            const betOptions = container.querySelectorAll('.bet-option');
-            betOptions.forEach(option => option.classList.remove('highlighted'));
-            if (homeScore > awayScore) {
-                betOptions[0].classList.add('highlighted'); // Victoire
-            } else if (homeScore === awayScore) {
-                betOptions[1].classList.add('highlighted'); // Nul
-            } else {
-                betOptions[2].classList.add('highlighted'); // Défaite
-            }
+    const resetBtn = document.getElementById('send-reset-email-btn');
+    if(resetBtn) {
+        resetBtn.addEventListener('click', async () => {
+            const email = document.getElementById('forgot-password-email').value.trim();
+            if (!email) return alert('Email requis');
+            
+            // Simulation
+            alert('Si cet email existe, vous recevrez les instructions.');
+            forgotPasswordModal.style.display = 'none';
         });
-    });
+    }
 
     // ---------- CREATION DE COMPTE ----------
-    document.getElementById('create-account-btn').addEventListener('click', async (e) => {
-        const name = document.getElementById('signup-name').value.trim();
-        const email = document.getElementById('signup-email').value.trim();
-        const password = document.getElementById('signup-password').value.trim();
+    const createAccountBtn = document.getElementById('create-account-btn');
+    if(createAccountBtn) {
+        createAccountBtn.addEventListener('click', async (e) => {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            if(name && email && password) {
+                 let users = JSON.parse(localStorage.getItem('users')) || {};
+                 
+                 if (users[email]) {
+                     alert("Cet email existe déjà !");
+                     return;
+                 }
 
-        if (!name || !email || !password) {
-            alert('Merci de remplir tous les champs.');
-            return;
-        }
-
-        // Validation de l'email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('Veuillez entrer un email valide.');
-            return;
-        }
-
-        // Validation du mot de passe
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{10,}$/;
-        if (!passwordRegex.test(password)) {
-            alert('Le mot de passe doit contenir au moins 10 caractères, une majuscule, une minuscule, un chiffre et un symbole.');
-            return;
-        }
-
-        // Vérifier si l'email existe déjà dans le localStorage
-        let users = JSON.parse(localStorage.getItem('users')) || {};
-        if (users[email]) {
-            alert("Cet email existe déjà !");
-            return;
-        }
-
-        // Désactiver le bouton pendant l'envoi
-        const createBtn = document.getElementById('create-account-btn');
-        const originalText = createBtn.textContent;
-        createBtn.disabled = true;
-        createBtn.textContent = 'Envoi en cours...';
-
-        try {
-            // Envoyer une requête au backend pour envoyer l'email de confirmation
-            const apiUrl = getApiBaseUrl();
-            const response = await fetch(`${apiUrl}/api/send-confirmation-email`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, name, password })
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                // Sauvegarder temporairement les données utilisateur avec le statut "non confirmé"
-                users[email] = { 
-                    name, 
-                    password,
-                    emailConfirmed: false,
-                    createdAt: new Date().toISOString()
-                };
-                localStorage.setItem('users', JSON.stringify(users));
-                
-                alert(`Un email de confirmation a été envoyé à ${email}. Veuillez vérifier votre boîte de réception et cliquer sur le lien pour activer votre compte.`);
-                signupModal.style.display = 'none';
-                
-                // Réinitialiser le formulaire
-                document.getElementById('signup-name').value = '';
-                document.getElementById('signup-email').value = '';
-                document.getElementById('signup-password').value = '';
+                 // CRUCIAL : On initialise les coins à 1000 ici
+                 users[email] = { 
+                     name: name, 
+                     password: password, 
+                     emailConfirmed: true, 
+                     coins: 1000 
+                 };
+                 
+                 localStorage.setItem('users', JSON.stringify(users));
+                 alert('Compte créé avec succès ! Vous avez reçu 1000 coins de bienvenue.');
+                 signupModal.style.display = 'none';
             } else {
-                alert(data.error || 'Erreur lors de l\'envoi de l\'email de confirmation. Veuillez réessayer.');
+                alert("Veuillez remplir tous les champs");
             }
-        } catch (error) {
-            console.error('Erreur détaillée:', error);
-            console.error('URL tentée:', `${getApiBaseUrl()}/api/send-confirmation-email`);
-            alert(`Erreur de connexion au serveur.\n\nDétails: ${error.message}\n\nVérifiez que:\n1. Le serveur est démarré (npm start)\n2. L'URL API est correcte (${getApiBaseUrl()})\n3. Le firewall ne bloque pas le port 3000`);
-        } finally {
-            // Réactiver le bouton
-            createBtn.disabled = false;
-            createBtn.textContent = originalText;
-        }
-    });
+        });
+    }
 
     // ---------- CONNEXION ----------
-    document.getElementById('login-account-btn').addEventListener('click', async () => {
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value.trim();
+    const loginAccountBtn = document.getElementById('login-account-btn');
+    if(loginAccountBtn) {
+        loginAccountBtn.addEventListener('click', async () => {
+             const email = document.getElementById('login-email').value;
+             const password = document.getElementById('login-password').value;
+             
+             let users = JSON.parse(localStorage.getItem('users')) || {};
+             
+             // Vérification simple
+             if(users[email] && users[email].password === password) {
+                 
+                 // CORRECTION : Si l'utilisateur n'a pas de coins (vieux compte), on lui met 1000
+                 if (users[email].coins === undefined || users[email].coins === null) {
+                     users[email].coins = 1000;
+                     localStorage.setItem('users', JSON.stringify(users));
+                 }
 
-        if (!email || !password) {
-            alert('Merci de remplir tous les champs.');
-            return;
-        }
-
-        const apiUrl = getApiBaseUrl();
-        let users = JSON.parse(localStorage.getItem('users')) || {};
-
-        try {
-            const response = await fetch(`${apiUrl}/api/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok || !data.success) {
-                throw new Error(data.error || 'Email ou mot de passe incorrect.');
-            }
-
-            // Synchroniser localStorage avec le serveur
-            users[email] = {
-                name: data.user.name,
-                password,
-                emailConfirmed: true,
-                confirmedAt: data.user.confirmedAt || new Date().toISOString()
-            };
-            localStorage.setItem('users', JSON.stringify(users));
-            localStorage.setItem('currentUser', email);
-            alert("Connexion réussie !");
-            loginModal.style.display = 'none';
-            updateUI();
-        } catch (err) {
-            // Fallback local si le serveur est injoignable mais que les données locales existent
-            if (!users[email] || users[email].password !== password) {
-                alert(err.message || "Email ou mot de passe incorrect.");
-                return;
-            }
-            if (users[email].emailConfirmed === false) {
-                alert("Votre compte n'est pas encore activé. Veuillez vérifier votre email et cliquer sur le lien de confirmation.");
-                return;
-            }
-            localStorage.setItem('currentUser', email);
-            alert("Connexion réussie (mode local) !");
-            loginModal.style.display = 'none';
-            updateUI();
-        }
-    });
+                 // On connecte l'utilisateur
+                 localStorage.setItem('currentUser', email);
+                 
+                 alert("Connexion réussie !");
+                 loginModal.style.display = 'none';
+                 updateUI();
+             } else {
+                 alert("Email ou mot de passe incorrect.");
+             }
+        });
+    }
 
     // ---------- LOGOUT ----------
-    document.getElementById('logout-btn').addEventListener('click', () => {
-        localStorage.removeItem('currentUser');
-        alert("Déconnexion réussie !");
-        updateUI();
-        dropdown.classList.add('hidden');
+    const logoutBtn = document.getElementById('logout-btn');
+    if(logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            alert("Déconnexion réussie !");
+            updateUI();
+            if(dropdown) dropdown.classList.add('hidden');
+        });
+    }
+
+    // ============================================================
+    //  GESTION DES PARIS (NOUVEAU SYSTÈME)
+    // ============================================================
+    // On sélectionne toutes les cartes de match pour gérer les clics
+    document.querySelectorAll('.match-card').forEach(card => {
+        const options = card.querySelectorAll('.bet-option');
+        const validateBtn = card.querySelector('.validate-bet-btn');
+        // Génère un ID si absent pour tester
+        const matchId = card.getAttribute('data-match-id') || 'match_' + Math.floor(Math.random() * 1000); 
+
+        // 1. QUAND ON CLIQUE SUR UNE COTE (Victoire/Nul/Défaite)
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                // Si pas de bouton valider, on ne fait rien
+                if (!validateBtn) return; 
+
+                // Si pari déjà placé (bouton caché), on bloque
+                if (validateBtn.classList.contains('hidden') && card.dataset.betPlaced === "true") return;
+
+                // a) On enlève l'orange des autres
+                options.forEach(opt => opt.classList.remove('selected'));
+                
+                // b) On met l'orange sur celui cliqué
+                this.classList.add('selected');
+
+                // c) On affiche le bouton Valider
+                validateBtn.classList.remove('hidden');
+            });
+        });
+
+        // 2. QUAND ON CLIQUE SUR "VALIDER LE PARI"
+        if (validateBtn) {
+            validateBtn.addEventListener('click', function() {
+                const userEmail = localStorage.getItem('currentUser');
+                
+                // Vérifier si connecté
+                if (!userEmail) {
+                    alert('Veuillez vous connecter pour parier.');
+                    return;
+                }
+
+                // Récupérer l'utilisateur
+                let users = JSON.parse(localStorage.getItem('users')) || {};
+                let user = users[userEmail];
+
+                // Vérifier les coins
+                if (!user.coins || user.coins < 10) {
+                    alert('Solde insuffisant ! Il vous faut 10 coins.');
+                    return;
+                }
+
+                // Récupérer le choix
+                const selectedOption = card.querySelector('.bet-option.selected');
+                if (!selectedOption) return; 
+
+                const choice = selectedOption.querySelector('.bet-label').textContent; // "Victoire"
+                const odds = parseFloat(selectedOption.querySelector('.bet-value').textContent); 
+
+                // --- ACTION : DÉBITER ET ENREGISTRER ---
+                
+                // 1. Débiter
+                user.coins -= 10;
+                
+                // 2. Enregistrer le pari
+                if (!user.bets) user.bets = []; 
+                user.bets.push({
+                    matchId: matchId,
+                    choice: choice,
+                    odds: odds,
+                    amount: 10,
+                    status: 'en cours',
+                    date: new Date().toISOString()
+                });
+
+                // 3. Sauvegarder
+                users[userEmail] = user;
+                localStorage.setItem('users', JSON.stringify(users));
+
+                // 4. Feedback visuel
+                updateUI(); // Met à jour le solde en haut
+                alert(`Pari validé sur "${choice}" ! 10 coins débités.`);
+
+                // 5. Masquer le bouton et verrouiller
+                validateBtn.classList.add('hidden');
+                card.dataset.betPlaced = "true"; 
+                card.style.border = "2px solid #28a745"; // Bordure verte
+            });
+        }
     });
 
-    // ---------- MISE A JOUR UI ----------
+
+    // ==========================================
+    //  FONCTION UPDATE UI
+    // ==========================================
     function updateUI() {
         const userEmail = localStorage.getItem('currentUser');
         const users = JSON.parse(localStorage.getItem('users')) || {};
-        const userName = userEmail ? users[userEmail].name : null;
+        const userName = userEmail ? (users[userEmail]?.name || 'Utilisateur') : null;
+        const userCoins = userEmail ? (users[userEmail]?.coins || 0) : 0;
 
         const userInfo = document.getElementById('user-info');
-        const profilBtn = document.getElementById('profil-btn');
         const userNameSpan = document.querySelector('.user-name');
+        const menuUsername = document.getElementById('menu-username');
 
-        if (userEmail && userName) {
-            userInfo.innerText = `Bienvenue, ${userName} !`;
-            userInfo.style.display = 'block';
-            profilBtn.style.display = 'block';
-            // Mettre à jour le nom d'utilisateur dans le header
-            if (userNameSpan) {
-                userNameSpan.textContent = userName;
+        // 1. Mise à jour des textes
+        if (userEmail) {
+            if(userInfo) {
+                userInfo.classList.remove('hidden'); 
+                if(menuUsername) menuUsername.textContent = userName;
             }
+            if(userNameSpan) userNameSpan.textContent = `🪙 ${userCoins}`;
         } else {
-            userInfo.style.display = 'none';
-            profilBtn.style.display = 'none';
-            // Réinitialiser le texte si déconnecté
-            if (userNameSpan) {
-                userNameSpan.textContent = 'Connectez vous!';
-            }
+            if(userInfo) userInfo.classList.add('hidden');
+            if(userNameSpan) userNameSpan.textContent = 'Connectez vous!';
         }
 
+        // 2. Gestion des boutons
+        const btnLogin = document.getElementById('login-btn');
+        const btnSignup = document.getElementById('signup-btn');
+        const btnLogout = document.getElementById('logout-btn');
 
-        document.getElementById('login-btn').style.display = userEmail ? 'none' : 'block';
-        document.getElementById('signup-btn').style.display = userEmail ? 'none' : 'block';
-        document.getElementById('logout-btn').style.display = userEmail ? 'block' : 'none';
+        if (userEmail) {
+            // Si connecté
+            if(btnLogin) btnLogin.classList.add('hidden');
+            if(btnSignup) btnSignup.classList.add('hidden');
+            if(btnLogout) btnLogout.classList.remove('hidden');
+        } else {
+            // Si déconnecté
+            if(btnLogin) btnLogin.classList.remove('hidden');
+            if(btnSignup) btnSignup.classList.remove('hidden');
+            if(btnLogout) btnLogout.classList.add('hidden');
+        }
     }
 
+    // Appeler updateUI au chargement
     updateUI();
 
-    // ---------- SECTION NAVIGATION ----------
+    // ---------- NAVIGATION PAR HASH ----------
     function showSection(sectionId) {
         document.querySelectorAll('main > section').forEach(section => {
             section.style.display = 'none';
@@ -338,47 +329,49 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // Initial load
+    handleHashChange();
 });
 
-// -------------------------------
-//  Fonction pour filtrer les matchs
-// -------------------------------
+// Fonctions utilitaires globales
 function filterMatchesBySport(sport, matchCards) {
     matchCards.forEach(card => {
         const cardSport = card.getAttribute('data-sport');
         if (cardSport === sport) {
             card.style.display = 'block';
-            card.style.animation = 'none';
-            card.offsetHeight;
-            card.style.animation = 'fadeIn 0.3s ease';
         } else {
             card.style.display = 'none';
         }
     });
 }
 
-// -------------------------------
-//  CLASSIFICATIONS TAB FUNCTION
-// -------------------------------
+// ==========================================
+//  FONCTION CORRIGÉE : GESTION DES ONGLETS
+// ==========================================
+// Plus besoin de 'event', on cherche le bouton qui correspond au sportId
 function showTab(sportId) {
-    // Masquer tous les contenus
+    // 1. Cacher tous les contenus
     document.querySelectorAll('.ranking-content').forEach(el => el.classList.remove('active'));
-    // Désactiver tous les boutons
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
     
-    // Activer le contenu et le bouton sélectionnés
-    document.getElementById(sportId).classList.add('active');
-    event.target.classList.add('active');
-}
-const style = document.createElement('style');
-style.textContent = `
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}`;
-document.head.appendChild(style);
+    // 2. Désactiver tous les boutons
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
-document.getElementById('profil-btn').addEventListener('click', () => {
-    window.location.href = 'profil.html';
-});
+    // 3. Afficher le contenu demandé
+    const content = document.getElementById(sportId);
+    if(content) content.classList.add('active');
+
+    // 4. Activer le bon bouton (Astuce pour éviter 'event')
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        // Si le bouton contient l'appel à la fonction avec le bon ID, on l'active
+        if(btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(sportId)) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+// Redirection profil
+const btnProfilExiste = document.getElementById('profil-btn');
+if(btnProfilExiste) {
+    btnProfilExiste.addEventListener('click', () => {
+        window.location.href = 'profil.html';
+    });
+}
