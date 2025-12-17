@@ -1,1 +1,9 @@
-{}
+{
+  "sacha.lathuilliere@esme.fr": {
+    "name": "sachal",
+    "email": "sacha.lathuilliere@esme.fr",
+    "password": "Sacha232311!",
+    "emailConfirmed": true,
+    "confirmedAt": "2025-12-17T16:56:31.804Z"
+  }
+}

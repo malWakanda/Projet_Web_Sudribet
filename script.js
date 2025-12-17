@@ -53,6 +53,74 @@ document.addEventListener('DOMContentLoaded', function () {
         loginModal.style.display = 'none';
     });
 
+    // ---------- MODAL MOT DE PASSE OUBLIÉ ----------
+    const forgotPasswordModal = document.getElementById('forgot-password-modal');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+    
+    forgotPasswordLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginModal.style.display = 'none';
+        forgotPasswordModal.style.display = 'flex';
+    });
+
+    document.getElementById('close-forgot-password-modal').addEventListener('click', () => {
+        forgotPasswordModal.style.display = 'none';
+        // Réinitialiser le formulaire
+        document.getElementById('forgot-password-email').value = '';
+    });
+
+    // ---------- ENVOI EMAIL RÉINITIALISATION ----------
+    document.getElementById('send-reset-email-btn').addEventListener('click', async () => {
+        const email = document.getElementById('forgot-password-email').value.trim();
+
+        if (!email) {
+            alert('Veuillez entrer votre adresse email.');
+            return;
+        }
+
+        // Validation de l'email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Veuillez entrer un email valide.');
+            return;
+        }
+
+        // Désactiver le bouton pendant l'envoi
+        const sendBtn = document.getElementById('send-reset-email-btn');
+        const originalText = sendBtn.textContent;
+        sendBtn.disabled = true;
+        sendBtn.textContent = 'Envoi en cours...';
+
+        try {
+            const apiUrl = getApiBaseUrl();
+            const response = await fetch(`${apiUrl}/api/forgot-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                alert('Si cet email existe dans notre système, vous recevrez un email avec les instructions pour réinitialiser votre mot de passe.');
+                forgotPasswordModal.style.display = 'none';
+                // Réinitialiser le formulaire
+                document.getElementById('forgot-password-email').value = '';
+            } else {
+                alert(data.error || 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer.');
+            }
+        } catch (error) {
+            console.error('Erreur détaillée:', error);
+            alert(`Erreur de connexion au serveur.\n\nDétails: ${error.message}\n\nVérifiez que:\n1. Le serveur est démarré (npm start)\n2. L'URL API est correcte (${getApiBaseUrl()})\n3. Le firewall ne bloque pas le port 3000`);
+        } finally {
+            // Réactiver le bouton
+            sendBtn.disabled = false;
+            sendBtn.textContent = originalText;
+        }
+    });
+
     // ---------- MISE A JOUR DES PARI EN FONCTION DU SCORE ----------
     const scoreInputs = document.querySelectorAll('.score-input');
     scoreInputs.forEach(input => {
@@ -226,14 +294,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const userInfo = document.getElementById('user-info');
         const profilBtn = document.getElementById('profil-btn');
+        const userNameSpan = document.querySelector('.user-name');
 
-        if (userEmail) {
+        if (userEmail && userName) {
             userInfo.innerText = `Bienvenue, ${userName} !`;
             userInfo.style.display = 'block';
             profilBtn.style.display = 'block';
+            // Mettre à jour le nom d'utilisateur dans le header
+            if (userNameSpan) {
+                userNameSpan.textContent = userName;
+            }
         } else {
             userInfo.style.display = 'none';
             profilBtn.style.display = 'none';
+            // Réinitialiser le texte si déconnecté
+            if (userNameSpan) {
+                userNameSpan.textContent = 'Connectez vous!';
+            }
         }
 
 
@@ -243,6 +320,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updateUI();
+
+    // ---------- SECTION NAVIGATION ----------
+    function showSection(sectionId) {
+        document.querySelectorAll('main > section').forEach(section => {
+            section.style.display = 'none';
+        });
+        const activeSection = document.getElementById(sectionId);
+        if (activeSection) {
+            activeSection.style.display = 'block';
+        }
+    }
+
+    function handleHashChange() {
+        const hash = window.location.hash.substring(1) || 'accueil';
+        showSection(hash);
+    }
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // Initial load
 });
 
 // -------------------------------
@@ -263,8 +359,18 @@ function filterMatchesBySport(sport, matchCards) {
 }
 
 // -------------------------------
-//  Animation fadeIn
+//  CLASSIFICATIONS TAB FUNCTION
 // -------------------------------
+function showTab(sportId) {
+    // Masquer tous les contenus
+    document.querySelectorAll('.ranking-content').forEach(el => el.classList.remove('active'));
+    // Désactiver tous les boutons
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    
+    // Activer le contenu et le bouton sélectionnés
+    document.getElementById(sportId).classList.add('active');
+    event.target.classList.add('active');
+}
 const style = document.createElement('style');
 style.textContent = `
 @keyframes fadeIn {

@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire d'Inscription</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="GradientText.css">
+    <link rel="stylesheet" href="PillNav.css">
+    <script src="GradientText.js" defer></script>
+    <script src="PillNav.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 
@@ -15,7 +19,7 @@
         <div class="header-content">
             <h1>Paris Sport ESME</h1>
             <div class="user-profile">
-                <span class="user-name">Wade Warren</span>
+                <span class="user-name">Connectez vous!</span>
                 <div class="profile-icon" id="profile-icon">+</div>
 
                 <!-- Menu déroulant -->
@@ -24,7 +28,7 @@
                     <button id="login-btn">Se connecter</button>
                     <button id="signup-btn">Créer un compte</button>
                     <button id="logout-btn" class="hidden">Se déconnecter</button>
-                    <button id="profil-btn">Profil</button>
+                    <a href="classements.html" style="text-decoration:none; width:100%;"><button id="classements-btn" style="width:100%;">Classements</button></a>
                 </div>
             </div>
 
@@ -35,6 +39,7 @@
     </header>
 
     <main>
+        <section id="accueil">
 
 
         <section class="tournaments">
@@ -350,7 +355,343 @@
                 </div>
             </div>
         </section>
-    </main>
+    </section>
+
+    <section id="tournois" style="display:none;">
+        <style>
+        .tournaments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .tournament-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .tournament-item:hover {
+            transform: translateY(-5px);
+        }
+        .tournament-img-container {
+            position: relative;
+            height: 200px;
+            background-color: #eee;
+        }
+        .tournament-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #FF6B35;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+        .tournament-info {
+            padding: 20px;
+        }
+        .tournament-info h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.4em;
+        }
+        .tournament-desc {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .tournament-location {
+            color: #888;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+        }
+        </style>
+        <h2 style="padding: 20px 20px 0;">Nos Tournois Majeurs</h2>
+        
+        <div class="tournaments-grid">
+            <!-- Le Toss -->
+            <div class="tournament-item">
+                <div class="tournament-img-container">
+                    <!-- Placeholder image -->
+                    <div style="width:100%; height:100%; background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);"></div>
+                    <div class="status-badge">Arrive prochainement</div>
+                </div>
+                <div class="tournament-info">
+                    <h3>Le Toss</h3>
+                    <p class="tournament-desc">Le plus grand tournoi omnisports étudiant de France. Une ambiance incroyable garantie.</p>
+                    <div class="tournament-location">📍 CentraleSupélec</div>
+                </div>
+            </div>
+
+            <!-- Les Ovalies -->
+            <div class="tournament-item">
+                <div class="tournament-img-container">
+                    <div style="width:100%; height:100%; background: linear-gradient(45deg, #11998e, #38ef7d);"></div>
+                    <div class="status-badge">Arrive prochainement</div>
+                </div>
+                <div class="tournament-info">
+                    <h3>Les Ovalies</h3>
+                    <p class="tournament-desc">Le plus grand tournoi de rugby universitaire à but solidaire. Du sport et du cœur.</p>
+                    <div class="tournament-location">📍 Beauvais</div>
+                </div>
+            </div>
+
+            <!-- Le Teams -->
+            <div class="tournament-item">
+                <div class="tournament-img-container">
+                    <div style="width:100%; height:100%; background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);"></div>
+                    <div class="status-badge">Arrive prochainement</div>
+                </div>
+                <div class="tournament-info">
+                    <h3>Le Teams</h3>
+                    <p class="tournament-desc">Tournoi Européen des Grandes Écoles de Commerce. La compétition à son apogée.</p>
+                    <div class="tournament-location">📍 Campus Ecully</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="classements" style="display:none;">
+        <style>
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 8px 20px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: #FF6B35;
+            color: white;
+            border-color: #FF6B35;
+        }
+        
+        .ranking-table-container {
+            background: white;
+            margin: 0 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.8em;
+            color: #666;
+            text-transform: uppercase;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .rank-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .rank-1 { background: #fff3cd; color: #856404; }
+        .rank-2 { background: #e2e3e5; color: #383d41; }
+        .rank-3 { background: #fce8e6; color: #721c24; }
+        
+        .points { font-weight: bold; color: #FF6B35; }
+        
+        .ranking-content { display: none; }
+        .ranking-content.active { display: block; }
+        </style>
+        <h2 style="padding: 20px;">Classements</h2>
+
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="showTab('football')">Football</button>
+            <button class="tab-btn" onclick="showTab('rugby')">Rugby</button>
+            <button class="tab-btn" onclick="showTab('basket')">Basket</button>
+        </div>
+
+        <div class="ranking-table-container">
+            <!-- Football Table -->
+            <div id="football" class="ranking-content active">
+                <table>
+                    <thead><tr><th>#</th><th>Équipe</th><th>MJ</th><th>Pts</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="rank-circle rank-1">1</span></td><td>FC Campus</td><td>5</td><td class="points">15</td></tr>
+                        <tr><td><span class="rank-circle rank-2">2</span></td><td>Polytech</td><td>5</td><td class="points">12</td></tr>
+                        <tr><td><span class="rank-circle rank-3">3</span></td><td>Les Aigles</td><td>5</td><td class="points">9</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Rugby Table -->
+            <div id="rugby" class="ranking-content">
+                <table>
+                    <thead><tr><th>#</th><th>Équipe</th><th>MJ</th><th>Pts</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="rank-circle rank-1">1</span></td><td>Les Ovales</td><td>4</td><td class="points">20</td></tr>
+                        <tr><td><span class="rank-circle rank-2">2</span></td><td>XV de France</td><td>4</td><td class="points">15</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Basket Table -->
+            <div id="basket" class="ranking-content">
+                <table>
+                    <thead><tr><th>#</th><th>Équipe</th><th>MJ</th><th>Pts</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="rank-circle rank-1">1</span></td><td>Dunkers</td><td>6</td><td class="points">18</td></tr>
+                        <tr><td><span class="rank-circle rank-2">2</span></td><td>IUT Basket</td><td>6</td><td class="points">14</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="matchs" style="display:none;">
+        <style>
+        .matches-list {
+            padding: 20px;
+        }
+        .match-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            margin-bottom: 10px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #FF6B35;
+        }
+        .match-date-sport {
+            display: flex;
+            flex-direction: column;
+            min-width: 80px;
+        }
+        .match-date { font-weight: bold; color: #333; }
+        .match-sport { font-size: 0.8em; color: #666; text-transform: uppercase; margin-top: 4px; }
+        
+        .match-teams {
+            flex-grow: 1;
+            text-align: center;
+            font-weight: 600;
+            padding: 0 10px;
+        }
+        .vs-badge {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            color: #555;
+            margin: 0 5px;
+        }
+        
+        .match-info {
+            text-align: right;
+            min-width: 80px;
+        }
+        .match-time { color: #FF6B35; font-weight: bold; }
+        .match-place { font-size: 0.8em; color: #888; display: block; margin-top: 4px; }
+        </style>
+        <div style="padding: 20px 20px 0; display:flex; justify-content:space-between; align-items:center;">
+            <h2>Calendrier des Matchs</h2>
+            <span style="font-size:0.9em; color:#666;">Saison 2023-2024</span>
+        </div>
+
+        <div class="matches-list">
+            <!-- Liste des matchs -->
+            <div class="match-row">
+                <div class="match-date-sport">
+                    <span class="match-date">15 Oct</span>
+                    <span class="match-sport">Rugby</span>
+                </div>
+                <div class="match-teams">
+                    Les Lions <span class="vs-badge">VS</span> Les Requins
+                </div>
+                <div class="match-info">
+                    <span class="match-time">14:00</span>
+                    <span class="match-place">Stade A</span>
+                </div>
+            </div>
+
+            <div class="match-row">
+                <div class="match-date-sport">
+                    <span class="match-date">18 Oct</span>
+                    <span class="match-sport">Football</span>
+                </div>
+                <div class="match-teams">
+                    FC Campus <span class="vs-badge">VS</span> Polytech
+                </div>
+                <div class="match-info">
+                    <span class="match-time">18:30</span>
+                    <span class="match-place">Terrain 2</span>
+                </div>
+            </div>
+
+            <div class="match-row">
+                <div class="match-date-sport">
+                    <span class="match-date">22 Oct</span>
+                    <span class="match-sport">Basket</span>
+                </div>
+                <div class="match-teams">
+                    Dunkers <span class="vs-badge">VS</span> IUT Basket
+                </div>
+                <div class="match-info">
+                    <span class="match-time">20:00</span>
+                    <span class="match-place">Gymnase B</span>
+                </div>
+            </div>
+
+            <div class="match-row">
+                <div class="match-date-sport">
+                    <span class="match-date">05 Nov</span>
+                    <span class="match-sport">Volley</span>
+                </div>
+                <div class="match-teams">
+                    Spikers <span class="vs-badge">VS</span> Net Masters
+                </div>
+                <div class="match-info">
+                    <span class="match-time">19:00</span>
+                    <span class="match-place">Gymnase A</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
     <div class="modal" id="signup-modal">
         <div class="modal-content">
             <h2>Créer un compte</h2>
@@ -371,18 +712,33 @@
             <input type="email" id="login-email" placeholder="Email">
             <input type="password" id="login-password" placeholder="Mot de passe">
 
+            <a href="#" id="forgot-password-link" style="display: block; text-align: right; margin: 10px 0; color: #FF6B35; text-decoration: none; font-size: 14px;">Mot de passe oublié ?</a>
+
             <button id="login-account-btn">Se connecter</button>
             <button id="close-login-modal" class="close-btn">Fermer</button>
         </div>
     </div>
 
+    <div class="modal" id="forgot-password-modal">
+        <div class="modal-content">
+            <h2>Mot de passe oublié</h2>
+            <p style="margin-bottom: 20px; color: #666;">Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.</p>
 
-    <footer class="bottom-nav">
-        <button class="nav-item">🏆</button>
-        <button class="nav-item">⚙️</button>
-        <button class="nav-item">📋</button>
-        <button class="nav-item">⋮</button>
-    </footer>
+            <input type="email" id="forgot-password-email" placeholder="Email">
+
+            <button id="send-reset-email-btn">Envoyer l'email de réinitialisation</button>
+            <button id="close-forgot-password-modal" class="close-btn">Fermer</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav"></div> 
+
+    <script src="GradientText.js" defer></script>
+    <script src="PillNav.js" defer></script>
+    <script src="script.js" defer></script>
+    </body>
+
+
 </body>
 
 </html>
