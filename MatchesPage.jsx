@@ -13,7 +13,7 @@ const MatchesPage = () => {
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Calendrier des Matchs</h1>
-        <div className="text-sm text-gray-500">Saison 2023-2024</div>
+        <div className="text-sm text-gray-500">Saison 2025-2026</div>
       </div>
 
       <div className="space-y-4">
