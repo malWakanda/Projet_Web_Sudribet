@@ -1373,3 +1373,38 @@ body.profil-page h1 {
 .hidden {
     display: none !important;
 }
+
+/* ========================================
+   ANIMATION DU TITRE (HEADER H1)
+======================================== */
+/* On cible spécifiquement le h1 qui est dans le header */
+header h1 {
+    /* Taille et police */
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0; /* Important pour éviter les décalages */
+
+    /* Le dégradé EXACT de ta capture (Jaune -> Orange -> Rouge) */
+    background: linear-gradient(
+        to right,
+        #FDBB2D 0%,   /* Jaune doré */
+        #FF6B35 50%,  /* Ton Orange ESME */
+        #FDBB2D 100%  /* Retour au Jaune */
+    );
+    
+    /* La configuration pour l'animation */
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    
+    /* L'animation qui tourne en boucle */
+    animation: shineEffect 3s linear infinite;
+}
+
+/* Les étapes de l'animation */
+@keyframes shineEffect {
+    to {
+        background-position: 200% center;
+    }
+}

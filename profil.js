@@ -168,3 +168,28 @@ document.addEventListener("DOMContentLoaded", () => {
         observer.observe(card);
     });
 });
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Récupérer l'élément checkbox grâce à son ID
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+    // Vérifier que l'élément existe bien sur la page (pour éviter les erreurs)
+    if (darkModeToggle) {
+        
+        // 2. Initialisation : Mettre la case à cocher dans le bon état au chargement
+        // On utilise la fonction isEnabled() de ton darkmode.js
+        if (window.darkMode && window.darkMode.isEnabled()) {
+            darkModeToggle.checked = true;
+        }
+
+        // 3. Écouteur d'événement : Quand on change l'état du bouton
+        darkModeToggle.addEventListener('change', (e) => {
+            // e.target.checked renvoie true si coché, false sinon
+            const isChecked = e.target.checked;
+            
+            // On appelle la fonction toggle de ton darkmode.js
+            if (window.darkMode) {
+                window.darkMode.toggle(isChecked);
+            }
+        });
+    }
+});
