@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Paris Sport ESME</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="darkmode.js"></script>
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8555 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-form button:hover {
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FF6B35;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .match-admin-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .match-admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .match-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .match-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .status-validated {
+            background: #D4EDDA;
+            color: #155724;
+        }
+
+        .bets-list {
+            margin: 15px 0;
+        }
+
+        .bet-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: var(--input-bg);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .bet-user {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .bet-prediction {
+            color: var(--text-secondary);
+        }
+
+        .bet-amount {
+            color: #FF6B35;
+            font-weight: 600;
+        }
+
+        .result-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .result-form select {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .validate-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #28a745 0%, #34ce57 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .validate-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .validate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .logout-admin-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .no-bets {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <h1>🔐 Administration</h1>
+        <form class="login-form" id="admin-login-form">
+            <input type="password" id="admin-password" placeholder="Mot de passe administrateur" required>
+            <button type="submit">Se connecter</button>
+        </form>
+        <div id="login-error" class="error-message hidden"></div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="hidden">
+        <button class="logout-admin-btn" id="logout-admin">Déconnexion</button>
+
+        <div class="admin-container">
+            <header style="margin-bottom: 30px;">
+                <h1 style="color: var(--text-primary);">📊 Panneau d'Administration</h1>
+                <p style="color: var(--text-secondary);">Gestion des paris et validation des résultats</p>
+            </header>
+
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-bets">0</div>
+                    <div class="stat-label">Paris Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="pending-matches">0</div>
+                    <div class="stat-label">Matchs en attente</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="validated-matches">0</div>
+                    <div class="stat-label">Matchs validés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-coins">0</div>
+                    <div class="stat-label">Coins en jeu</div>
+                </div>
+            </div>
+
+            <!-- Matches List -->
+            <h2 style="margin-bottom: 20px; color: var(--text-primary);">Matchs et Paris</h2>
+            <div id="matches-container"></div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>

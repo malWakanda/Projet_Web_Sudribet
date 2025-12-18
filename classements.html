@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classements - Paris Sport ESME</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="PillNav.css">
+    <script src="darkmode.js"></script>
     <script src="PillNav.js" defer></script>
     <style>
         .tabs-container {
@@ -15,45 +17,51 @@
             margin-bottom: 20px;
             overflow-x: auto;
         }
+
         .tab-btn {
             padding: 8px 20px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 20px;
-            background: white;
+            background: var(--card-bg);
             cursor: pointer;
             font-weight: bold;
-            color: #666;
+            color: var(--text-secondary);
             transition: all 0.3s;
         }
+
         .tab-btn.active {
             background: #FF6B35;
             color: white;
             border-color: #FF6B35;
         }
-        
+
         .ranking-table-container {
-            background: white;
+            background: var(--card-bg);
             margin: 0 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-sm);
             overflow: hidden;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         th {
-            background: #f8f9fa;
+            background: var(--input-bg);
             padding: 12px;
             text-align: left;
             font-size: 0.8em;
-            color: #666;
+            color: var(--text-secondary);
             text-transform: uppercase;
         }
+
         td {
             padding: 12px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
         }
+
         .rank-circle {
             display: inline-flex;
             align-items: center;
@@ -64,16 +72,37 @@
             font-weight: bold;
             font-size: 0.9em;
         }
-        .rank-1 { background: #fff3cd; color: #856404; }
-        .rank-2 { background: #e2e3e5; color: #383d41; }
-        .rank-3 { background: #fce8e6; color: #721c24; }
-        
-        .points { font-weight: bold; color: #FF6B35; }
-        
-        .ranking-content { display: none; }
-        .ranking-content.active { display: block; }
+
+        .rank-1 {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .rank-2 {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .rank-3 {
+            background: #fce8e6;
+            color: #721c24;
+        }
+
+        .points {
+            font-weight: bold;
+            color: #FF6B35;
+        }
+
+        .ranking-content {
+            display: none;
+        }
+
+        .ranking-content.active {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <div class="header-content">
@@ -94,11 +123,33 @@
             <!-- Football Table -->
             <div id="football" class="ranking-content active">
                 <table>
-                    <thead><tr><th>#</th><th>Équipe</th><th>MJ</th><th>Pts</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Équipe</th>
+                            <th>MJ</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <tr><td><span class="rank-circle rank-1">1</span></td><td>FC Campus</td><td>5</td><td class="points">15</td></tr>
-                        <tr><td><span class="rank-circle rank-2">2</span></td><td>Polytech</td><td>5</td><td class="points">12</td></tr>
-                        <tr><td><span class="rank-circle rank-3">3</span></td><td>Les Aigles</td><td>5</td><td class="points">9</td></tr>
+                        <tr>
+                            <td><span class="rank-circle rank-1">1</span></td>
+                            <td>FC Campus</td>
+                            <td>5</td>
+                            <td class="points">15</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-circle rank-2">2</span></td>
+                            <td>Polytech</td>
+                            <td>5</td>
+                            <td class="points">12</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-circle rank-3">3</span></td>
+                            <td>Les Aigles</td>
+                            <td>5</td>
+                            <td class="points">9</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -106,10 +157,27 @@
             <!-- Rugby Table -->
             <div id="rugby" class="ranking-content">
                 <table>
-                    <thead><tr><th>#</th><th>Équipe</th><th>MJ</th><th>Pts</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Équipe</th>
+                            <th>MJ</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <tr><td><span class="rank-circle rank-1">1</span></td><td>Les Ovales</td><td>4</td><td class="points">20</td></tr>
-                        <tr><td><span class="rank-circle rank-2">2</span></td><td>XV de France</td><td>4</td><td class="points">15</td></tr>
+                        <tr>
+                            <td><span class="rank-circle rank-1">1</span></td>
+                            <td>Les Ovales</td>
+                            <td>4</td>
+                            <td class="points">20</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-circle rank-2">2</span></td>
+                            <td>XV de France</td>
+                            <td>4</td>
+                            <td class="points">15</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -117,10 +185,27 @@
             <!-- Basket Table -->
             <div id="basket" class="ranking-content">
                 <table>
-                    <thead><tr><th>#</th><th>Équipe</th><th>MJ</th><th>Pts</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Équipe</th>
+                            <th>MJ</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <tr><td><span class="rank-circle rank-1">1</span></td><td>Dunkers</td><td>6</td><td class="points">18</td></tr>
-                        <tr><td><span class="rank-circle rank-2">2</span></td><td>IUT Basket</td><td>6</td><td class="points">14</td></tr>
+                        <tr>
+                            <td><span class="rank-circle rank-1">1</span></td>
+                            <td>Dunkers</td>
+                            <td>6</td>
+                            <td class="points">18</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-circle rank-2">2</span></td>
+                            <td>IUT Basket</td>
+                            <td>6</td>
+                            <td class="points">14</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -133,7 +218,7 @@
             document.querySelectorAll('.ranking-content').forEach(el => el.classList.remove('active'));
             // Désactiver tous les boutons
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
+
             // Activer le contenu et le bouton sélectionnés
             document.getElementById(sportId).classList.add('active');
             event.target.classList.add('active');
@@ -142,6 +227,7 @@
 
     <div class="bottom-nav"></div>
     <script src="PillNav.js" defer></script>
-    
+
 </body>
+
 </html>

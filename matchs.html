@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matchs - Paris Sport ESME</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="PillNav.css">
+    <script src="darkmode.js"></script>
     <script src="PillNav.js" defer></script>
     <style>
         .matches-list {
@@ -13,48 +15,72 @@
             max-width: 800px;
             margin: 0 auto;
         }
+
         .match-row {
-            background: white;
+            background: var(--card-bg);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-sm);
             border-left: 4px solid #FF6B35;
         }
+
         .match-date-sport {
             display: flex;
             flex-direction: column;
             min-width: 80px;
         }
-        .match-date { font-weight: bold; color: #333; }
-        .match-sport { font-size: 0.8em; color: #666; text-transform: uppercase; margin-top: 4px; }
-        
+
+        .match-date {
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .match-sport {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
         .match-teams {
             flex-grow: 1;
             text-align: center;
             font-weight: 600;
             padding: 0 10px;
         }
+
         .vs-badge {
-            background: #eee;
+            background: var(--input-bg);
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 0.8em;
-            color: #555;
+            color: var(--text-secondary);
             margin: 0 5px;
         }
-        
+
         .match-info {
             text-align: right;
             min-width: 80px;
         }
-        .match-time { color: #FF6B35; font-weight: bold; }
-        .match-place { font-size: 0.8em; color: #888; display: block; margin-top: 4px; }
+
+        .match-time {
+            color: #FF6B35;
+            font-weight: bold;
+        }
+
+        .match-place {
+            font-size: 0.8em;
+            color: var(--text-tertiary);
+            display: block;
+            margin-top: 4px;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <div class="header-content">
@@ -65,7 +91,7 @@
     <main>
         <div style="padding: 20px 20px 0; display:flex; justify-content:space-between; align-items:center;">
             <h2>Calendrier des Matchs</h2>
-            <span style="font-size:0.9em; color:#666;">Saison 2023-2024</span>
+            <span style="font-size:0.9em; color:#666;">Saison 2025-2026</span>
         </div>
 
         <div class="matches-list">
@@ -130,4 +156,5 @@
     <div class="bottom-nav"></div>
     <script src="PillNav.js" defer></script>
 </body>
+
 </html>

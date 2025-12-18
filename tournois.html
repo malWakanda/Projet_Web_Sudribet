@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tournois - Paris Sport ESME</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="PillNav.css">
+    <script src="darkmode.js"></script>
     <script src="PillNav.js" defer></script>
     <style>
         .tournaments-grid {
@@ -14,26 +16,31 @@
             gap: 20px;
             padding: 20px;
         }
+
         .tournament-item {
-            background: white;
+            background: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
             transition: transform 0.2s;
         }
+
         .tournament-item:hover {
             transform: translateY(-5px);
         }
+
         .tournament-img-container {
             position: relative;
             height: 200px;
             background-color: #eee;
         }
+
         .tournament-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+
         .status-badge {
             position: absolute;
             top: 10px;
@@ -44,36 +51,50 @@
             border-radius: 20px;
             font-size: 0.8em;
             font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             animation: pulse 2s infinite;
         }
+
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.8; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
+
         .tournament-info {
             padding: 20px;
         }
+
         .tournament-info h3 {
             margin-top: 0;
-            color: #333;
+            color: var(--text-primary);
             font-size: 1.4em;
         }
+
         .tournament-desc {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 0.95em;
             line-height: 1.5;
             margin-bottom: 15px;
         }
+
         .tournament-location {
-            color: #888;
+            color: var(--text-tertiary);
             font-size: 0.9em;
             display: flex;
             align-items: center;
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="header-content">
@@ -83,18 +104,21 @@
 
     <main>
         <h2 style="padding: 20px 20px 0;">Nos Tournois Majeurs</h2>
-        
+
         <div class="tournaments-grid">
             <!-- Le Toss -->
             <div class="tournament-item">
                 <div class="tournament-img-container">
                     <!-- Placeholder image -->
-                    <div style="width:100%; height:100%; background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);"></div>
+                    <div
+                        style="width:100%; height:100%; background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);">
+                    </div>
                     <div class="status-badge">Arrive prochainement</div>
                 </div>
                 <div class="tournament-info">
                     <h3>Le Toss</h3>
-                    <p class="tournament-desc">Le plus grand tournoi omnisports étudiant de France. Une ambiance incroyable garantie.</p>
+                    <p class="tournament-desc">Le plus grand tournoi omnisports étudiant de France. Une ambiance
+                        incroyable garantie.</p>
                     <div class="tournament-location">📍 CentraleSupélec</div>
                 </div>
             </div>
@@ -107,7 +131,8 @@
                 </div>
                 <div class="tournament-info">
                     <h3>Les Ovalies</h3>
-                    <p class="tournament-desc">Le plus grand tournoi de rugby universitaire à but solidaire. Du sport et du cœur.</p>
+                    <p class="tournament-desc">Le plus grand tournoi de rugby universitaire à but solidaire. Du sport et
+                        du cœur.</p>
                     <div class="tournament-location">📍 Beauvais</div>
                 </div>
             </div>
@@ -115,12 +140,15 @@
             <!-- Le Teams -->
             <div class="tournament-item">
                 <div class="tournament-img-container">
-                    <div style="width:100%; height:100%; background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);"></div>
+                    <div
+                        style="width:100%; height:100%; background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);">
+                    </div>
                     <div class="status-badge">Arrive prochainement</div>
                 </div>
                 <div class="tournament-info">
                     <h3>Le Teams</h3>
-                    <p class="tournament-desc">Tournoi Européen des Grandes Écoles de Commerce. La compétition à son apogée.</p>
+                    <p class="tournament-desc">Tournoi Européen des Grandes Écoles de Commerce. La compétition à son
+                        apogée.</p>
                     <div class="tournament-location">📍 Campus Ecully</div>
                 </div>
             </div>
@@ -129,4 +157,5 @@
     <div class="bottom-nav"></div>
     <script src="PillNav.js" defer></script>
 </body>
+
 </html>

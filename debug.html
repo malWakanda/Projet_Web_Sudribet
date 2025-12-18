@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Vérification des paris</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #FF6B35;
+            margin-top: 0;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        button {
+            background: #FF6B35;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #FF8555;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Debug - Vérification des Paris</h1>
+
+    <div class="debug-section">
+        <h2>Actions</h2>
+        <button onclick="showBets()">Afficher les paris</button>
+        <button onclick="showUsers()">Afficher les utilisateurs</button>
+        <button onclick="showResults()">Afficher les résultats</button>
+        <button onclick="clearAll()">Effacer tout</button>
+    </div>
+
+    <div class="debug-section">
+        <h2>Paris stockés (localStorage.bets)</h2>
+        <pre id="bets-output">Cliquez sur "Afficher les paris"</pre>
+    </div>
+
+    <div class="debug-section">
+        <h2>Utilisateurs (localStorage.users)</h2>
+        <pre id="users-output">Cliquez sur "Afficher les utilisateurs"</pre>
+    </div>
+
+    <div class="debug-section">
+        <h2>Résultats validés (localStorage.matchResults)</h2>
+        <pre id="results-output">Cliquez sur "Afficher les résultats"</pre>
+    </div>
+
+    <script>
+        function showBets() {
+            const bets = JSON.parse(localStorage.getItem('bets')) || {};
+            document.getElementById('bets-output').textContent = JSON.stringify(bets, null, 2);
+
+            // Compter les paris
+            let totalBets = 0;
+            Object.keys(bets).forEach(matchId => {
+                totalBets += bets[matchId].length;
+            });
+            console.log('Total paris:', totalBets);
+        }
+
+        function showUsers() {
+            const users = JSON.parse(localStorage.getItem('users')) || {};
+            document.getElementById('users-output').textContent = JSON.stringify(users, null, 2);
+        }
+
+        function showResults() {
+            const results = JSON.parse(localStorage.getItem('matchResults')) || {};
+            document.getElementById('results-output').textContent = JSON.stringify(results, null, 2);
+        }
+
+        function clearAll() {
+            if (confirm('Êtes-vous sûr de vouloir effacer TOUTES les données (paris, résultats) ?')) {
+                localStorage.removeItem('bets');
+                localStorage.removeItem('matchResults');
+                alert('Données effacées ! (Les utilisateurs sont conservés)');
+                showBets();
+                showResults();
+            }
+        }
+
+        // Afficher automatiquement au chargement
+        showBets();
+    </script>
+</body>
+
+</html>

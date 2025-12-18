@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const dropdown = document.querySelector('.dropdown-menu');
 
     if (profileIcon && dropdown) {
-        dropdown.classList.add('hidden'); // Masqué par défaut
+        dropdown.classList.add('hidden');
         profileIcon.addEventListener('click', () => {
             dropdown.classList.toggle('hidden');
         });
@@ -38,15 +38,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // ---------- GESTION DES MODALES ----------
     const signupModal = document.getElementById('signup-modal');
     const signupBtn = document.getElementById('signup-btn');
-    if(signupBtn) {
+    if (signupBtn) {
         signupBtn.addEventListener('click', () => {
             signupModal.style.display = 'flex';
-            if(dropdown) dropdown.classList.add('hidden');
+            if (dropdown) dropdown.classList.add('hidden');
         });
     }
-    
+
     const closeModal = document.getElementById('close-modal');
-    if(closeModal) {
+    if (closeModal) {
         closeModal.addEventListener('click', () => {
             signupModal.style.display = 'none';
         });
@@ -54,15 +54,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const loginModal = document.getElementById('login-modal');
     const loginBtn = document.getElementById('login-btn');
-    if(loginBtn) {
+    if (loginBtn) {
         loginBtn.addEventListener('click', () => {
             loginModal.style.display = 'flex';
-            if(dropdown) dropdown.classList.add('hidden');
+            if (dropdown) dropdown.classList.add('hidden');
         });
     }
 
     const closeLoginModal = document.getElementById('close-login-modal');
-    if(closeLoginModal) {
+    if (closeLoginModal) {
         closeLoginModal.addEventListener('click', () => {
             loginModal.style.display = 'none';
         });
@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // ---------- MODAL MOT DE PASSE OUBLIÉ ----------
     const forgotPasswordModal = document.getElementById('forgot-password-modal');
     const forgotPasswordLink = document.getElementById('forgot-password-link');
-    
-    if(forgotPasswordLink) {
+
+    if (forgotPasswordLink) {
         forgotPasswordLink.addEventListener('click', (e) => {
             e.preventDefault();
             loginModal.style.display = 'none';
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const closeForgotModal = document.getElementById('close-forgot-password-modal');
-    if(closeForgotModal) {
+    if (closeForgotModal) {
         closeForgotModal.addEventListener('click', () => {
             forgotPasswordModal.style.display = 'none';
             document.getElementById('forgot-password-email').value = '';
@@ -90,12 +90,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ---------- ENVOI EMAIL RÉINITIALISATION ----------
     const resetBtn = document.getElementById('send-reset-email-btn');
-    if(resetBtn) {
+    if (resetBtn) {
         resetBtn.addEventListener('click', async () => {
             const email = document.getElementById('forgot-password-email').value.trim();
             if (!email) return alert('Email requis');
-            
-            // Simulation
             alert('Si cet email existe, vous recevrez les instructions.');
             forgotPasswordModal.style.display = 'none';
         });
@@ -103,31 +101,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ---------- CREATION DE COMPTE ----------
     const createAccountBtn = document.getElementById('create-account-btn');
-    if(createAccountBtn) {
+    if (createAccountBtn) {
         createAccountBtn.addEventListener('click', async (e) => {
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
-            
-            if(name && email && password) {
-                 let users = JSON.parse(localStorage.getItem('users')) || {};
-                 
-                 if (users[email]) {
-                     alert("Cet email existe déjà !");
-                     return;
-                 }
 
-                 // CRUCIAL : On initialise les coins à 1000 ici
-                 users[email] = { 
-                     name: name, 
-                     password: password, 
-                     emailConfirmed: true, 
-                     coins: 1000 
-                 };
-                 
-                 localStorage.setItem('users', JSON.stringify(users));
-                 alert('Compte créé avec succès ! Vous avez reçu 1000 coins de bienvenue.');
-                 signupModal.style.display = 'none';
+            if (name && email && password) {
+                let users = JSON.parse(localStorage.getItem('users')) || {};
+                if (users[email]) {
+                    alert("Cet email existe déjà !");
+                    return;
+                }
+                users[email] = {
+                    name: name,
+                    password: password,
+                    emailConfirmed: true,
+                    coins: 1000
+                };
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('Compte créé avec succès ! +1000 coins.');
+                signupModal.style.display = 'none';
             } else {
                 alert("Veuillez remplir tous les champs");
             }
@@ -136,135 +130,181 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ---------- CONNEXION ----------
     const loginAccountBtn = document.getElementById('login-account-btn');
-    if(loginAccountBtn) {
+    if (loginAccountBtn) {
         loginAccountBtn.addEventListener('click', async () => {
-             const email = document.getElementById('login-email').value;
-             const password = document.getElementById('login-password').value;
-             
-             let users = JSON.parse(localStorage.getItem('users')) || {};
-             
-             // Vérification simple
-             if(users[email] && users[email].password === password) {
-                 
-                 // CORRECTION : Si l'utilisateur n'a pas de coins (vieux compte), on lui met 1000
-                 if (users[email].coins === undefined || users[email].coins === null) {
-                     users[email].coins = 1000;
-                     localStorage.setItem('users', JSON.stringify(users));
-                 }
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            let users = JSON.parse(localStorage.getItem('users')) || {};
 
-                 // On connecte l'utilisateur
-                 localStorage.setItem('currentUser', email);
-                 
-                 alert("Connexion réussie !");
-                 loginModal.style.display = 'none';
-                 updateUI();
-             } else {
-                 alert("Email ou mot de passe incorrect.");
-             }
+            if (users[email] && users[email].password === password) {
+                if (users[email].coins === undefined || users[email].coins === null) {
+                    users[email].coins = 1000;
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                localStorage.setItem('currentUser', email);
+                alert("Connexion réussie !");
+                loginModal.style.display = 'none';
+
+                // On recharge la page pour appliquer l'état des paris immédiatement
+                window.location.reload();
+            } else {
+                alert("Email ou mot de passe incorrect.");
+            }
         });
     }
 
     // ---------- LOGOUT ----------
     const logoutBtn = document.getElementById('logout-btn');
-    if(logoutBtn) {
+    if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem('currentUser');
             alert("Déconnexion réussie !");
             updateUI();
-            if(dropdown) dropdown.classList.add('hidden');
+            if (dropdown) dropdown.classList.add('hidden');
+            // On recharge pour enlever les paris visuels
+            window.location.reload();
         });
     }
 
     // ============================================================
-    //  GESTION DES PARIS (NOUVEAU SYSTÈME)
+    //  GESTION DES PARIS (AVEC RESTAURATION)
     // ============================================================
-    // On sélectionne toutes les cartes de match pour gérer les clics
     document.querySelectorAll('.match-card').forEach(card => {
         const options = card.querySelectorAll('.bet-option');
         const validateBtn = card.querySelector('.validate-bet-btn');
-        // Génère un ID si absent pour tester
-        const matchId = card.getAttribute('data-match-id') || 'match_' + Math.floor(Math.random() * 1000); 
+        // ATTENTION : Pour que ça marche, il faut que l'ID soit fixe dans le HTML (ex: data-match-id="match_1")
+        const matchId = card.getAttribute('data-match-id');
 
-        // 1. QUAND ON CLIQUE SUR UNE COTE (Victoire/Nul/Défaite)
+        // 0. RESTAURATION DE L'ÉTAT (Vérification dans le stockage centralisé)
+        if (matchId) {
+            const userEmail = localStorage.getItem('currentUser');
+            if (userEmail) {
+                // Vérifier dans le stockage centralisé des paris
+                const bets = JSON.parse(localStorage.getItem('bets')) || {};
+                const matchBets = bets[matchId] || [];
+                const userBet = matchBets.find(bet => bet.userId === userEmail);
+
+                if (userBet) {
+                    // Le pari existe ! On restaure le visuel
+
+                    // Convertir la prédiction en label de choix
+                    let choiceLabel = '';
+                    if (userBet.prediction === 'victoire') choiceLabel = 'Victoire';
+                    else if (userBet.prediction === 'nul') choiceLabel = 'Nul';
+                    else if (userBet.prediction === 'defaite') choiceLabel = 'Défaite';
+
+                    // 1. On retrouve la case qu'il avait choisie et on la met en orange
+                    options.forEach(opt => {
+                        const label = opt.querySelector('.bet-label').textContent;
+                        if (label === choiceLabel) {
+                            opt.classList.add('selected');
+                        }
+                    });
+
+                    // 2. On cache le bouton valider
+                    if (validateBtn) validateBtn.classList.add('hidden');
+
+                    // 3. On verrouille la carte (bordure verte)
+                    card.dataset.betPlaced = "true";
+                    card.style.border = "2px solid #28a745";
+                }
+            }
+        }
+
+        // 1. QUAND ON CLIQUE SUR UNE COTE
         options.forEach(option => {
-            option.addEventListener('click', function() {
-                // Si pas de bouton valider, on ne fait rien
-                if (!validateBtn) return; 
-
-                // Si pari déjà placé (bouton caché), on bloque
+            option.addEventListener('click', function () {
+                if (!validateBtn) return;
                 if (validateBtn.classList.contains('hidden') && card.dataset.betPlaced === "true") return;
 
-                // a) On enlève l'orange des autres
                 options.forEach(opt => opt.classList.remove('selected'));
-                
-                // b) On met l'orange sur celui cliqué
                 this.classList.add('selected');
-
-                // c) On affiche le bouton Valider
                 validateBtn.classList.remove('hidden');
             });
         });
 
-        // 2. QUAND ON CLIQUE SUR "VALIDER LE PARI"
+        // 2. QUAND ON CLIQUE SUR "VALIDER"
         if (validateBtn) {
-            validateBtn.addEventListener('click', function() {
+            validateBtn.addEventListener('click', function () {
                 const userEmail = localStorage.getItem('currentUser');
-                
-                // Vérifier si connecté
+
                 if (!userEmail) {
                     alert('Veuillez vous connecter pour parier.');
                     return;
                 }
 
-                // Récupérer l'utilisateur
                 let users = JSON.parse(localStorage.getItem('users')) || {};
                 let user = users[userEmail];
 
-                // Vérifier les coins
                 if (!user.coins || user.coins < 10) {
-                    alert('Solde insuffisant ! Il vous faut 10 coins.');
+                    alert('Solde insuffisant !');
                     return;
                 }
 
-                // Récupérer le choix
                 const selectedOption = card.querySelector('.bet-option.selected');
-                if (!selectedOption) return; 
+                if (!selectedOption) return;
 
-                const choice = selectedOption.querySelector('.bet-label').textContent; // "Victoire"
-                const odds = parseFloat(selectedOption.querySelector('.bet-value').textContent); 
+                const choice = selectedOption.querySelector('.bet-label').textContent;
+                const odds = parseFloat(selectedOption.querySelector('.bet-value').textContent);
 
-                // --- ACTION : DÉBITER ET ENREGISTRER ---
-                
-                // 1. Débiter
+                // Si pas d'ID, on en crée un temporaire (mais attention à la persistance !)
+                const finalId = matchId || 'temp_' + Date.now();
+
+                // Vérifier si l'utilisateur a déjà parié sur ce match
+                const bets = JSON.parse(localStorage.getItem('bets')) || {};
+                const matchBets = bets[finalId] || [];
+                const alreadyBet = matchBets.some(bet => bet.userId === userEmail);
+
+                if (alreadyBet) {
+                    alert('Vous avez déjà parié sur ce match !');
+                    return;
+                }
+
+                // Convertir le choix en format standardisé
+                let prediction = '';
+                if (choice === 'Victoire') prediction = 'victoire';
+                else if (choice === 'Nul') prediction = 'nul';
+                else if (choice === 'Défaite') prediction = 'defaite';
+
+                // Débit
                 user.coins -= 10;
-                
-                // 2. Enregistrer le pari
-                if (!user.bets) user.bets = []; 
+
+                // Enregistrement dans user.bets (pour l'historique)
+                if (!user.bets) user.bets = [];
                 user.bets.push({
-                    matchId: matchId,
+                    matchId: finalId,
                     choice: choice,
                     odds: odds,
                     amount: 10,
-                    status: 'en cours',
+                    status: 'pending',
                     date: new Date().toISOString()
                 });
 
-                // 3. Sauvegarder
+                // Enregistrement centralisé pour l'admin
+                if (!bets[finalId]) bets[finalId] = [];
+                bets[finalId].push({
+                    userId: userEmail,
+                    userName: user.name || userEmail,
+                    prediction: prediction,
+                    amount: 10,
+                    odds: odds,
+                    timestamp: new Date().toISOString(),
+                    status: 'pending'
+                });
+
                 users[userEmail] = user;
                 localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('bets', JSON.stringify(bets));
 
-                // 4. Feedback visuel
-                updateUI(); // Met à jour le solde en haut
-                alert(`Pari validé sur "${choice}" ! 10 coins débités.`);
+                updateUI();
+                alert(`Pari validé sur "${choice}" !`);
 
-                // 5. Masquer le bouton et verrouiller
                 validateBtn.classList.add('hidden');
-                card.dataset.betPlaced = "true"; 
-                card.style.border = "2px solid #28a745"; // Bordure verte
+                card.dataset.betPlaced = "true";
+                card.style.border = "2px solid #28a745";
             });
         }
     });
-
 
     // ==========================================
     //  FONCTION UPDATE UI
@@ -279,37 +319,32 @@ document.addEventListener('DOMContentLoaded', function () {
         const userNameSpan = document.querySelector('.user-name');
         const menuUsername = document.getElementById('menu-username');
 
-        // 1. Mise à jour des textes
         if (userEmail) {
-            if(userInfo) {
-                userInfo.classList.remove('hidden'); 
-                if(menuUsername) menuUsername.textContent = userName;
+            if (userInfo) {
+                userInfo.classList.remove('hidden');
+                if (menuUsername) menuUsername.textContent = userName;
             }
-            if(userNameSpan) userNameSpan.textContent = `🪙 ${userCoins}`;
+            if (userNameSpan) userNameSpan.textContent = `🪙 ${userCoins}`;
         } else {
-            if(userInfo) userInfo.classList.add('hidden');
-            if(userNameSpan) userNameSpan.textContent = 'Connectez vous!';
+            if (userInfo) userInfo.classList.add('hidden');
+            if (userNameSpan) userNameSpan.textContent = 'Connectez vous!';
         }
 
-        // 2. Gestion des boutons
         const btnLogin = document.getElementById('login-btn');
         const btnSignup = document.getElementById('signup-btn');
         const btnLogout = document.getElementById('logout-btn');
 
         if (userEmail) {
-            // Si connecté
-            if(btnLogin) btnLogin.classList.add('hidden');
-            if(btnSignup) btnSignup.classList.add('hidden');
-            if(btnLogout) btnLogout.classList.remove('hidden');
+            if (btnLogin) btnLogin.classList.add('hidden');
+            if (btnSignup) btnSignup.classList.add('hidden');
+            if (btnLogout) btnLogout.classList.remove('hidden');
         } else {
-            // Si déconnecté
-            if(btnLogin) btnLogin.classList.remove('hidden');
-            if(btnSignup) btnSignup.classList.remove('hidden');
-            if(btnLogout) btnLogout.classList.add('hidden');
+            if (btnLogin) btnLogin.classList.remove('hidden');
+            if (btnSignup) btnSignup.classList.remove('hidden');
+            if (btnLogout) btnLogout.classList.add('hidden');
         }
     }
 
-    // Appeler updateUI au chargement
     updateUI();
 
     // ---------- NAVIGATION PAR HASH ----------
@@ -332,7 +367,6 @@ document.addEventListener('DOMContentLoaded', function () {
     handleHashChange();
 });
 
-// Fonctions utilitaires globales
 function filterMatchesBySport(sport, matchCards) {
     matchCards.forEach(card => {
         const cardSport = card.getAttribute('data-sport');
@@ -344,33 +378,22 @@ function filterMatchesBySport(sport, matchCards) {
     });
 }
 
-// ==========================================
-//  FONCTION CORRIGÉE : GESTION DES ONGLETS
-// ==========================================
-// Plus besoin de 'event', on cherche le bouton qui correspond au sportId
 function showTab(sportId) {
-    // 1. Cacher tous les contenus
     document.querySelectorAll('.ranking-content').forEach(el => el.classList.remove('active'));
-    
-    // 2. Désactiver tous les boutons
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
-    // 3. Afficher le contenu demandé
     const content = document.getElementById(sportId);
-    if(content) content.classList.add('active');
+    if (content) content.classList.add('active');
 
-    // 4. Activer le bon bouton (Astuce pour éviter 'event')
     document.querySelectorAll('.tab-btn').forEach(btn => {
-        // Si le bouton contient l'appel à la fonction avec le bon ID, on l'active
-        if(btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(sportId)) {
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(sportId)) {
             btn.classList.add('active');
         }
     });
 }
 
-// Redirection profil
 const btnProfilExiste = document.getElementById('profil-btn');
-if(btnProfilExiste) {
+if (btnProfilExiste) {
     btnProfilExiste.addEventListener('click', () => {
         window.location.href = 'profil.html';
     });

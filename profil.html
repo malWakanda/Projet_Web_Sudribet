@@ -1,34 +1,164 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="PillNav.css">
+    <script src="darkmode.js"></script>
     <script src="PillNav.js" defer></script>
     <script src="profil.js" defer></script>
 </head>
-<body>
+
+<body class="profil-page">
     <header>
         <div class="header-content">
             <h1>Mon Profil</h1>
         </div>
     </header>
 
-    <main style="padding: 20px;">
-        <div id="profile-info">
-            <h2>Bienvenue, <span id="profile-username"></span> !</h2>
-            <p><strong>Email :</strong> <span id="profile-email"></span></p>
-            <p><strong>Autres infos :</strong> à compléter...</p>
+    <main class="profile-main">
+        <!-- Profile Header Card -->
+        <div class="profile-header-card">
+            <div class="profile-background-gradient"></div>
+            <div class="profile-avatar-container">
+                <div class="profile-avatar" id="profile-avatar">
+                    <span id="avatar-initials"></span>
+                </div>
+                <div class="profile-header-info">
+                    <h2 id="profile-username-display">Chargement...</h2>
+                    <p class="profile-email-display" id="profile-email-display"></p>
+                    <div class="profile-badges">
+                        <span class="badge badge-verified">✓ Vérifié</span>
+                        <span class="badge badge-member">Membre depuis 2024</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <button id="logout-btn" style="margin-top:20px; padding:10px 20px; background:#FF6B35; color:white; border:none; border-radius:6px; cursor:pointer;">
+        <!-- Statistics Cards -->
+        <div class="stats-section">
+            <h3 class="section-title">Statistiques</h3>
+            <div class="stats-grid">
+                <div class="stat-card stat-card-1">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="stat-tournaments">12</div>
+                        <div class="stat-label">Tournois</div>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-2">
+                    <div class="stat-icon">⚽</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="stat-matches">48</div>
+                        <div class="stat-label">Matchs</div>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-3">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="stat-wins">32</div>
+                        <div class="stat-label">Victoires</div>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-4">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="stat-winrate">67%</div>
+                        <div class="stat-label">Taux de réussite</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Section -->
+        <div class="activity-section">
+            <h3 class="section-title">Activité récente</h3>
+            <div class="activity-timeline">
+                <div class="activity-item">
+                    <div class="activity-icon">🏆</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Tournoi complété</div>
+                        <div class="activity-description">Ligue des Champions - Phase de groupes</div>
+                        <div class="activity-time">Il y a 2 heures</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">⚽</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Match prédit</div>
+                        <div class="activity-description">PSG vs Manchester City</div>
+                        <div class="activity-time">Il y a 5 heures</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">🎯</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Prédiction correcte</div>
+                        <div class="activity-description">Real Madrid 2-1 Barcelona</div>
+                        <div class="activity-time">Hier</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bet History Section -->
+        <div class="bets-history-section">
+            <h3 class="section-title">Historique des Paris</h3>
+            <div class="bets-history-card" id="bets-history-container">
+                <div class="no-bets">Aucun pari pour le moment</div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div class="settings-section">
+            <h3 class="section-title">Paramètres</h3>
+            <div class="settings-card">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Notifications</div>
+                        <div class="setting-description">Recevoir des alertes pour les matchs</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Mode sombre</div>
+                        <div class="setting-description">Activer le thème sombre</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Emails hebdomadaires</div>
+                        <div class="setting-description">Résumé de vos performances</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Button -->
+        <button id="logout-btn" class="logout-button">
+            <span class="logout-icon">🚪</span>
             Se déconnecter
         </button>
     </main>
+
     <div class="bottom-nav"></div>
     <script src="PillNav.js" defer></script>
     <script src="profil.js" defer></script>
 </body>
+
 </html>
