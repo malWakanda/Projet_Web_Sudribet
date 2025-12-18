@@ -12,6 +12,7 @@
     <script src="GradientText.js" defer></script>
     <script src="PillNav.js" defer></script>
     <script src="script.js" defer></script>
+    <script src="search.js" defer></script>
 </head>
 
 <body>
@@ -33,9 +34,12 @@
             </div>
 
         </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Rechercher par événements, équipes">
-        </div>
+       <div class="search-bar">
+    <input type="text" placeholder="Rechercher par événements, équipes">
+</div>
+<div id="no-results" style="display: none; text-align: center; color: var(--text-secondary); margin-top: 10px;">
+    Aucun résultat trouvé 😢
+</div>
     </header>
 
     <main>
@@ -43,7 +47,6 @@
 
 
             <section class="tournaments">
-                <h2>Tournois</h2>
                 <div class="tournament-card">
                     <div class="tournament-badge">Tous les matches</div>
                     <h3>LIGUE FFSU</h3>
