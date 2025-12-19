@@ -110,31 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ========================================
     // MODE SOMBRE
     // ========================================
-
-    // Récupérer la préférence du mode sombre depuis localStorage
-    const darkModeEnabled = localStorage.getItem("darkMode") === "true";
-    const darkModeToggle = document.querySelector('.setting-item:nth-child(2) input[type="checkbox"]');
-
-    // Appliquer le mode sombre au chargement si activé
-    if (darkModeEnabled) {
-        document.body.classList.add("dark-mode");
-        if (darkModeToggle) {
-            darkModeToggle.checked = true;
-        }
-    }
-
-    // Écouter le changement du toggle du mode sombre
-    if (darkModeToggle) {
-        darkModeToggle.addEventListener("change", (e) => {
-            if (e.target.checked) {
-                document.body.classList.add("dark-mode");
-                localStorage.setItem("darkMode", "true");
-            } else {
-                document.body.classList.remove("dark-mode");
-                localStorage.setItem("darkMode", "false");
-            }
-        });
-    }
+    // Géré par le second bloc DOMContentLoaded ci-dessous
 
     // ========================================
     // DÉCONNEXION
@@ -174,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Vérifier que l'élément existe bien sur la page (pour éviter les erreurs)
     if (darkModeToggle) {
-        
+
         // 2. Initialisation : Mettre la case à cocher dans le bon état au chargement
         // On utilise la fonction isEnabled() de ton darkmode.js
         if (window.darkMode && window.darkMode.isEnabled()) {
@@ -185,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         darkModeToggle.addEventListener('change', (e) => {
             // e.target.checked renvoie true si coché, false sinon
             const isChecked = e.target.checked;
-            
+
             // On appelle la fonction toggle de ton darkmode.js
             if (window.darkMode) {
                 window.darkMode.toggle(isChecked);
