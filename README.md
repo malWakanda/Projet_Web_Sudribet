@@ -383,7 +383,7 @@ ISC
 
 ## 👥 Auteurs
 
-Projet réalisé par les étudiants de l'ESME - Ingénieur 2
+Projet réalisé par Sacha Lathuillière, Julian Expert, Malo Greffier.
 
 ---
 
